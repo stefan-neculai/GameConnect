@@ -1,0 +1,47 @@
+.gamesWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.gamesGrid {
+    display: grid;
+    width: 70vw;
+    grid-template-columns: repeat(5, 1fr); /* Creates 5 columns, each taking up 1 fraction of the available space */
+    grid-gap: 10px; /* Optional: adds space between the grid items */
+}
+
+.gamePanel {
+    /* Additional styles for each game panel */
+    padding: 10px; /* Example padding */
+    border: 1px solid #ccc; /* Example border */
+}
+
+.gamePanel img {
+    width: 100%; /* Makes the image take up the full width of the parent element */
+    height: auto; /* Makes the image scale proportionally */
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+    .pagination button {
+      background-color: white;
+      border: none;
+      padding: 5px 10px;
+      margin: 0 5px;
+      cursor: pointer;
+    }
+
+    .pagination button:hover {
+      background-color: #f8f8f8;
+    }
+  
+  .pagination button:disabled {
+    color: #999;
+    cursor: not-allowed;
+  }

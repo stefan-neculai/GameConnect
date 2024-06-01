@@ -8,9 +8,8 @@ interface AuthenticatedRequest extends Request {
 }
 
 const authenticateToken = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const authHeader = req.header('Authorization');
-    const token = authHeader && authHeader.split(' ')[1]; // Correctly split the header to extract the token
-    console.log(authHeader);
+    const token = req.cookies.token; // Correctly split the header to extract the token
+
     if (!token) {
       return res.status(401).send('Access Denied: No token provided');
     }

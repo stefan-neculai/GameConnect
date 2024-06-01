@@ -1,0 +1,60 @@
+.gameDetails img {
+    width: 100%;
+    max-width: 300px; /* Set a maximum width for images */
+}
+
+.gameDetails {
+  width: 80vw;
+}
+
+.gameGeneralInfo {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  width: 100%;
+}
+
+.gameGeneralInfoFlexbox {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+}
+
+.reviewsWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.reviewsList {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.review {
+  display: flex;
+  flex: column;
+  justify-content: start;
+}
+
+.reviewAuthor {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+}
+
+.reviewAuthor img {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+
+}
+.reviewsSimilarGamesWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+  
