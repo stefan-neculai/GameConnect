@@ -5,6 +5,7 @@ import './Profile.css';
 import EditProfileModal from '../components/EditProfileModal';
 import { useParams } from 'react-router-dom';
 import { Game } from '../types/Game';
+import { Link } from 'react-router-dom';
 
 const Profile: React.FC = () => {
   const { user } = useAuth();
@@ -47,7 +48,7 @@ const Profile: React.FC = () => {
 
     fetchData();
     fetchFavoriteGames();
-    
+
   }, [id]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -87,6 +88,38 @@ const Profile: React.FC = () => {
       setEditing(false);
     }
   };
+
+  const followUser = async () => {
+    if (user) {
+      const response = await fetch(`http://localhost:4000/api/user/follow/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include', // Ensure cookies are sent with the request
+      });
+
+      if(response.ok) { 
+        console.log('User followed successfully');
+      }
+    }
+  };
+
+  const unfollowUser = async () => {
+    if (user) {
+      const response = await fetch(`http://localhost:4000/api/user/unfollow/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include', // Ensure cookies are sent with the request
+      });
+
+      if(response.ok) { 
+        console.log('User unfollowed successfully');
+      }
+    }
+  }
   
 
   if (!userData) {
@@ -107,7 +140,12 @@ const Profile: React.FC = () => {
           <div className="profileHeaderTopRight">
             <h2>{userData.username}</h2>
             {id === user?.id && <button onClick={() => setModalOpen(true)}> Edit Profile </button>}
+            {user && userData.followers.includes(user.id)?
+              <button onClick={unfollowUser}> Unfollow </button>
+              : id !== user?.id && <button onClick={followUser}> Follow </button>}
           </div>
+          <p> Followers: {userData.followers.length} </p>
+          <p> Follows: {userData.follows.length} </p>
           <p>{userData.email}</p>
           <p>{userData.bio}</p>
         </div>
@@ -120,10 +158,13 @@ const Profile: React.FC = () => {
         <h2>Favorite Games</h2>
         <div className="favoriteGamesList">
           {favoriteGames.map(game => (
-            <div key={game._id} className="favoriteGame">
-              <img src={`//images.igdb.com/igdb/image/upload/t_cover_big/${game.cover.url.split('/')[7]}`} alt="Game Cover" />
-              <p>{game.name}</p>
-            </div>
+            <Link to={`/game/${game._id}`} key={game._id}>
+              <div key={game._id} className="favoriteGame">
+                <img src={`//images.igdb.com/igdb/image/upload/t_cover_big/${game.cover.url.split('/')[7]}`} alt="Game Cover" />
+                <p>{game.name}</p>
+              </div>
+            </Link>
+
           ))}
         </div>
       </div>}

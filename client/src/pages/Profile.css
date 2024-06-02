@@ -6,6 +6,7 @@
 .profileHeader {
     display: flex;
     height: 250px; 
+    gap: 20px;
 
 }
 

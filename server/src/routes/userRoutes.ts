@@ -1,5 +1,5 @@
 import express from 'express';
-import { signUp, login, getUserById, updateUser, addGameToFavorites } from '../controllers/userController';
+import { signUp, login, getUserById, updateUser, addGameToFavorites, followUser } from '../controllers/userController';
 import authenticateToken from '../middleware/auth';
 
 
@@ -11,5 +11,6 @@ router.get('/users', authenticateToken);
 router.get('/user/:id', authenticateToken, getUserById);
 router.put('/user/update/:id', authenticateToken, updateUser);
 router.put('/user/favorite/:id', authenticateToken, addGameToFavorites);
+router.put('/user/follow/:id', authenticateToken, followUser);
 
 export default router;

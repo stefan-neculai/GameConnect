@@ -18,6 +18,7 @@ const GameDetails: React.FC = () => {
   const [game, setGame] = useState<Game | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [similar_games, setSimilarGames] = useState<Game[]>([]);
   const { id } = useParams<RouteParams>();
   const { user } = useAuth();
   
@@ -38,6 +39,21 @@ const GameDetails: React.FC = () => {
       }
     }
 
+    async function fetchSimilarGames() {
+      const response = await fetch(`http://localhost:4000/api/games/similar/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include', // Ensure cookies are sent with the request
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data)
+        setSimilarGames(data);
+      }
+    }
+
     async function fetchReviews() {
       const response = await fetch(`http://localhost:4000/api/reviews/game/${id}`, {
         method: 'GET',
@@ -53,10 +69,12 @@ const GameDetails: React.FC = () => {
     }
 
     fetchGame();
+    fetchSimilarGames();
     fetchReviews();
-  }, []);
+    window.scrollTo(0, 0);
+  }, [id]);
 
-  const handleReviewSubmit = (review: { rating: number; content: string }) => {
+  const handleReviewSubmit = async (review: { rating: number; content: string }) => {
     console.log('Review Submitted:', user);
     const reviewData = {
       game: game?._id,
@@ -77,7 +95,11 @@ const GameDetails: React.FC = () => {
       credentials: 'include', // Ensure cookies are sent with the request
       body: JSON.stringify(reviewData)
     });
-    // Implement the API call to submit the review to the server
+
+    if ((await response).ok) {
+      window.location.reload();
+    }
+
   };
 
   async function addGameToFavorites() {
@@ -111,7 +133,7 @@ const GameDetails: React.FC = () => {
           <p><strong>Game Modes:</strong> {game.game_modes.map(mode => mode.name).join(', ')}</p>
           <p><strong>Release Date:</strong> {new Date(game.first_release_date * 1000).toDateString()}</p>
         </div>
-        <div>
+        <div className="gameOptions">
           <h1> <strong>{game.averageRating}</strong>/10  <FontAwesomeIcon icon={faStar} /></h1>
           
           <button onClick={() => setModalOpen(true)}>Add Review</button>
@@ -146,15 +168,19 @@ const GameDetails: React.FC = () => {
           </div>
         </div>
         
+      {similar_games && similar_games.length > 0 && 
       <div className="similarGamesWrapper">
         <h2>Similar Games</h2>
-          {game.similar_games.map(sg => (
-            <div key={sg.id}>
-              <img src={`https://images.igdb.com/igdb/image/upload/t_thumb/${sg.cover.url.split('/')[7]}`} alt={sg.name} />
-              <p>{sg.name}</p>
-            </div>
+          {similar_games.map(sg => (
+            <Link to={`/game/${sg._id}`} key={sg._id}>
+              <div key={sg.id} className="similarGame">
+                <img src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${sg.cover.url.split('/')[7]}`} alt={sg.name} />
+                <p>{sg.name}</p>
+              </div>
+            </Link>
           ))}
       </div>
+      }
         
       </div>
     </div>

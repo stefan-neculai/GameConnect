@@ -114,5 +114,37 @@ export const addGameToFavorites = async (req: Request, res: Response): Promise<v
   }
 }
 
+// the id of the user to be followed is in the url, and the user initiating the request is in the jwt token
+export const followUser = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+  const requestingId = (req as any).user.id;
+  try {
+    const user = await User.findOne({ _id : id });
+    if (!user) {
+      res.status(404).send('User not found');
+      return;
+    }
+    // add the requesting user to the follows list of the user to be followed
+    user.followers.push(new mongoose.Types.ObjectId(requestingId));
+    await user.save();
+
+    // add the user to be followed to the follows list of the requesting user
+    const requesting = await User.findOne({ _id : requestingId });
+    if (!requesting) {
+      res.status(404).send('Requesting user not found');
+      return;
+    }
+    requesting.follows.push(new mongoose.Types.ObjectId(id));
+    await requesting.save();
+
+    res.status(200).send('User followed successfully');
+  }
+  catch (err: any) {
+    res.status(500).send('Error following user: ' + err.message);
+  }
+}
+
+
+
 
 

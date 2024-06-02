@@ -66,3 +66,23 @@ export const getFavoriteGames = async (req: Request, res: Response): Promise<voi
     }
 }
 
+export const getSimilarGames = async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params;
+    try {
+        const game = await Game.findOne({ _id : id });
+        if (!game) {
+            res.status(404).send('Game not found');
+            return;
+        }
+        // this should fetch the data of the similar games based on the names found in games.similar_games
+        const names = game.similar_games.map((game) => game.name);
+        const similarGames = await Game.find({ name : { $in : names } });
+        
+        // Return the results
+        res.status(200).json(similarGames);
+    }
+    catch (err: any) {
+        res.status(500).send('Error getting similar games: ' + err.message);
+    }
+}
+
