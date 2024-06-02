@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Game } from '../types/Game';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import './Game.css';
 import AddReviewModal from '../components/AddReviewModal';
 import { profile } from 'console';
 import { useAuth } from '../context/AuthContext';
 import { Review } from '../types/Review';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 interface RouteParams {
   id: string;
@@ -78,13 +80,28 @@ const GameDetails: React.FC = () => {
     // Implement the API call to submit the review to the server
   };
 
+  async function addGameToFavorites() {
+    if(user) {
+      const response = await fetch(`http://localhost:4000/api/user/favorite/${user.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include', // Ensure cookies are sent with the request
+        body: JSON.stringify({ gameId: id })
+      });
+      if (response.ok) {
+        console.log('Game added to favorites');
+      }
+    }
+  }
 
   if (!game) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div className="gameDetails">
+    <div className="gamePage">
       <div className="gameGeneralInfo">
         <img src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover.url.split('/')[7]}`} alt="Game Cover" />
         <div className="gameGeneralInfoFlexbox">
@@ -95,8 +112,10 @@ const GameDetails: React.FC = () => {
           <p><strong>Release Date:</strong> {new Date(game.first_release_date * 1000).toDateString()}</p>
         </div>
         <div>
-          <h1> {game.averageRating} </h1>
+          <h1> <strong>{game.averageRating}</strong>/10  <FontAwesomeIcon icon={faStar} /></h1>
+          
           <button onClick={() => setModalOpen(true)}>Add Review</button>
+          <button onClick={addGameToFavorites}> Add to Favorites </button>
           <AddReviewModal 
             isOpen={isModalOpen} 
             onClose={() => setModalOpen(false)}
@@ -116,7 +135,7 @@ const GameDetails: React.FC = () => {
               <div key={review._id} className="review">
                 <div className="reviewAuthor">
                   <img src={review.author.profilePic!=''? review.author.profilePic : "https://t3.ftcdn.net/jpg/03/58/90/78/360_F_358907879_Vdu96gF4XVhjCZxN2kCG0THTsSQi8IhT.jpg"} alt="Author" />
-                  <p>{review.author.username}</p>
+                  <Link to={`/profile/${review.author.userId}`}>{review.author.username}</Link>
                 </div>
                 <div className="reviewContent">
                   <p>{review.content}</p>

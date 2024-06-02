@@ -7,6 +7,7 @@ interface AuthContextType {
   isLoggedIn: boolean;
   user: User | null;
   handleLogin: () => void;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,7 +36,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(handleLogin, []);
   return (
-    <AuthContext.Provider value={{ handleLogin, isLoggedIn, user }}>
+    <AuthContext.Provider value={{ handleLogin, isLoggedIn, user, setIsLoggedIn }}>
       {children}
     </AuthContext.Provider>
   );

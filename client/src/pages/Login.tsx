@@ -90,7 +90,7 @@ const Login: React.FC = () => {
           {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
         </div>
         
-        {loading ? <div className="loader"></div> : <button type="submit" disabled={loading}> Loading </button>}
+        {loading ? <div className="loader"> </div> : <button type="submit" disabled={loading}> Log In </button>}
       
       </form>
     </div>

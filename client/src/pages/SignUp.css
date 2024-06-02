@@ -1,6 +1,6 @@
 /* SignupForm.css */
-.form-container {
-  max-width: 400px;
+.SignUp {
+  width: 50%;
   margin: 2rem auto;
   padding: 2rem;
   border: 1px solid #ccc;
@@ -9,14 +9,14 @@
   background-color: white;
 }
 
-.form-container label {
+.SignUp label {
   display: block;
   margin-bottom: 0.5rem;
   font-size: 1rem;
   color: #333;
 }
 
-.form-container input {
+.SignUp input {
   width: 100%;
   padding: 0.8rem;
   margin-bottom: 1rem;
@@ -25,12 +25,12 @@
   box-sizing: border-box; /* includes padding and border in element's total width and height */
 }
 
-.form-container input:focus {
+.SignUp input:focus {
   border-color: #0056b3;
   outline: none;
 }
 
-.form-container button {
+.SignUp button {
   width: 100%;
   padding: 1rem;
   background-color: #007bff;
@@ -42,7 +42,7 @@
   transition: background-color 0.3s;
 }
 
-.form-container button:hover {
+.SignUp button:hover {
   background-color: #0056b3;
 }
 

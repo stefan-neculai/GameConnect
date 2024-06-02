@@ -47,3 +47,22 @@ export const getGameById = async (req: Request, res: Response): Promise<void> =>
         res.status(500).send('Error retrieving game: ' + err.message);
     }
 }
+
+export const getFavoriteGames = async (req: Request, res: Response): Promise<void> => { 
+    const { id } = req.params;
+    try {
+        const user = await User.findOne({ _id : id });
+        if (!user) {
+            res.status(404).send('User not found');
+            return;
+        }
+        // this should fetch the cover art and name of the favorite games
+        const favoriteGames = await Game.find({ _id : { $in : user.favoriteGames } });
+        // Return the results
+        res.status(200).json(favoriteGames);
+    }
+    catch (err: any) {
+        res.status(500).send('Error getting favorite games: ' + err.message);
+    }
+}
+

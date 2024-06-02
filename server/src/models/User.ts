@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
     profilePicture: { type: String, default: '' },
     bio: { type: String, default: '' },
+    favoriteGames: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Game' }],
   }, { timestamps: true });
   
 

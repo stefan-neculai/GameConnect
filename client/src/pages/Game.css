@@ -1,9 +1,9 @@
-.gameDetails img {
+.gamePage img {
     width: 100%;
     max-width: 300px; /* Set a maximum width for images */
 }
 
-.gameDetails {
+.gamePage {
   width: 80vw;
 }
 
@@ -11,6 +11,7 @@
   display: flex;
   justify-content: start;
   align-items: start;
+  gap: 10px;
   width: 100%;
 }
 

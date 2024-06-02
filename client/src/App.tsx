@@ -16,7 +16,7 @@ import GameDetails from './pages/Game';
 
 
 const App: React.FC = () => {
-  const { isLoggedIn, handleLogin, user } = useAuth();
+  const { isLoggedIn, setIsLoggedIn, handleLogin, user } = useAuth();
   const navigate  = useNavigate();
 
   useEffect(handleLogin, []);
@@ -24,7 +24,7 @@ const App: React.FC = () => {
   const handleLogout = () => {
     // Clear cookie by setting its expiry to the past
     document.cookie = 'token=; Max-Age=0; path=/;';
-
+    setIsLoggedIn(false);
     // Optionally redirect the user to the login page
     navigate('/login');
   };
@@ -42,13 +42,7 @@ const App: React.FC = () => {
                 <Link to={"/profile/" + user.id}>Profile</Link>
               </li>}
               <li>
-                <Link to="/about">About</Link>
-              </li>
-              <li>
                 <Link to="/games">Games</Link>
-              </li>
-              <li>
-                <Link to="/contact">Contact</Link>
               </li>
               {!isLoggedIn &&
               <>       
@@ -60,9 +54,7 @@ const App: React.FC = () => {
                 </li>
               </>
               }
-              <li>
-                <button onClick={handleLogout}>Logout</button>
-              </li>
+              <button className="logoutButton" onClick={handleLogout}>Logout</button>
             </ul>
           </nav>
         </header>
@@ -75,7 +67,7 @@ const App: React.FC = () => {
             <Route path="/games" element={<Games />} />
             <Route path="/game/:id" element={<GameDetails />} />
             <Route path="/login" element={<Login />} />
-            {user &&  <Route path="/profile/:id" element={<Profile id={user?.id} />} /> }
+            {user &&  <Route path="/profile/:id" element={<Profile />} /> }
           </Routes>
         </main>
       </div>
