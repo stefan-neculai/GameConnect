@@ -89,13 +89,6 @@ main {
     background-color: #0056b3;
   }
   
-  button[type="button"] {
-    background-color: #6c757d; /* Bootstrap secondary color for example */
-  }
-  
-  button[type="button"]:hover {
-    background-color: #545b62;
-  }
 
   .logoutButton {
     height: 50%;

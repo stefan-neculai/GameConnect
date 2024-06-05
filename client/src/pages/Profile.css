@@ -14,7 +14,7 @@
     display: block;
 }
 
-.profileHeader img {
+.profilePicture {
     border-radius: 100%;
     height: 80%;
     width: auto;
@@ -22,12 +22,12 @@
 
 .profileHeaderTopRight {
     display: flex;
-    justify-content: start;
+    justify-content: space-between;
     align-items: center;
 }
 
-.profileHeaderTopRight * {
-    margin: 10px;
+.profileHeaderTopRight button {
+    margin-right: 0;
 }
 
 .favoriteGamesList {
@@ -40,6 +40,13 @@
     height: 200px;
     object-fit: cover;
 
+}
+
+.userCounts {
+    font-weight: 500    ;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
 }
 
 /* For medium-sized screens, reduce to 3 columns */

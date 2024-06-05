@@ -8,6 +8,7 @@ import { Game } from '../types/Game';
 import { Link } from 'react-router-dom';
 import Modal from '../components/Modal';
 
+
 const Profile: React.FC = () => {
   const { user } = useAuth();
   const { id } = useParams();
@@ -59,14 +60,16 @@ const Profile: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (profile: { bio: string, file : File | undefined}) => {
+  const handleSubmit = async (profile: { bio: string, profilePic : File | undefined, banner : File | undefined}) => {
     if (profile) {
       const formData = new FormData();
       formData.append('bio', profile.bio);
-      if (profile.file) {
-        formData.append('profilePicture', profile.file);
+      if (profile.profilePic) {
+        formData.append('profilePicture', profile.profilePic);
       }
-
+      if (profile.banner) {
+        formData.append('banner', profile.banner);
+      }
       const response = await fetch('http://localhost:4000/api/user/update/' + id, {
         method: 'PUT',
         credentials: 'include', // Ensure cookies are sent with the request
@@ -123,9 +126,9 @@ const Profile: React.FC = () => {
       <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
         <EditProfileModal onProfileSubmit={handleSubmit} onClose={() => setModalOpen(false)}/>
       </Modal>
-      <img className="banner" src="https://media.istockphoto.com/id/157524162/photo/highway-to-the-sunset.jpg?s=612x612&w=0&k=20&c=sGyNGXRjHV7r3pT93wexWJdiEMfe5lyBmv-GvCoZftQ="/>
+      <img className="banner" src={userData.banner? "http://localhost:4000/" + userData.banner : defaultPicURL}/>
       <div className="profileHeader">
-        <img src={userData.profilePicture? "http://localhost:4000/" + userData.profilePicture : defaultPicURL}/>
+        <img className="profilePicture" src={userData.profilePicture? "http://localhost:4000/" + userData.profilePicture : defaultPicURL}/>
         <div className="profileHeaderRight">
           <div className="profileHeaderTopRight">
             <h2>{userData.username}</h2>
@@ -134,9 +137,11 @@ const Profile: React.FC = () => {
               <button onClick={unfollowUser}> Unfollow </button>
               : id !== user?.id && <button onClick={followUser}> Follow </button>}
           </div>
-          <p> Followers: {userData.followers.length} </p>
-          <p> Follows: {userData.follows.length} </p>
-          <p>{userData.email}</p>
+          <div className="userCounts">
+            <p> {userData.followers.length} followers </p>
+            <p> {userData.follows.length} following </p>
+            <p> 20 posts </p>
+          </div>
           <p>{userData.bio}</p>
         </div>
       </div>

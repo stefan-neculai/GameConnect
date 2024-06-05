@@ -21,7 +21,7 @@ const GameDetails: React.FC = () => {
   const [similar_games, setSimilarGames] = useState<Game[]>([]);
   const { id } = useParams<RouteParams>();
   const { user } = useAuth();
-  
+  const defaultPicURL = "http://localhost:4000/images/default.jpg";
 
 
   useEffect(() => {
@@ -156,7 +156,7 @@ const GameDetails: React.FC = () => {
             {reviews.map(review => (
               <div key={review._id} className="review">
                 <div className="reviewAuthor">
-                  <img src={review.author.profilePic!=''? review.author.profilePic : "https://t3.ftcdn.net/jpg/03/58/90/78/360_F_358907879_Vdu96gF4XVhjCZxN2kCG0THTsSQi8IhT.jpg"} alt="Author" />
+                  <img src={review.author.profilePic? "http://localhost:4000/" + review.author.profilePic : defaultPicURL} alt="Author"/>
                   <Link to={`/profile/${review.author.userId}`}>{review.author.username}</Link>
                 </div>
                 <div className="reviewContent">

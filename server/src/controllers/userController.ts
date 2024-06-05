@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
 import mongoose from 'mongoose';
+import Review from '../models/Review';
 
 const jwtSecret = 'your_jwt_secret';
 
@@ -85,10 +86,24 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
       user.email = email;
     if(password)
       user.password = password;
-    if(req.file)
-      user.profilePicture = req.file.path;
     if(bio)
       user.bio = bio;
+
+    if (req.files) {
+      const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+      if (files.profilePicture) {
+        user.profilePicture = files.profilePicture[0].path;
+        // need to update the profile picture in every review and comment
+        const reviews = await Review.find({ 'author.userId' : id });
+        for (let review of reviews) {
+          review.author.profilePic = files.profilePicture[0].path;
+          await review.save();
+        }
+      }
+      if (files.banner) {
+        user.banner = files.banner[0].path;
+      }
+    }
     await user.save();
     res.status(200).send('User updated successfully');
   }

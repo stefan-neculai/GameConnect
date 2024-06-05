@@ -96,10 +96,19 @@ const Games: React.FC = () => {
           onChange={handlePlatformChange}
         >
           <option value="all">Platform</option>
-          <option value="pc">PC</option>
-          <option value="ps4">PS4</option>
-          <option value="xbox">Xbox</option>
-          <option value="switch">Switch</option>
+          <option value="PC (Microsoft Windows)">PC</option>
+          <option value="Linux">Linux</option>
+          <option value="Mac">Mac</option>
+          <option value="PlayStation 5">PS5</option>
+          <option value="PlayStation 4">PS4</option>
+          <option value="PlayStation 3">PS3</option>
+          <option value="PlayStation 2">PS2</option>
+          <option value="PlayStation">PS</option>
+          <option value="Xbox Series X|S">Xbox Series X</option>
+          <option value="Xbox One">Xbox One</option>
+          <option value="Xbox 360">Xbox 360</option>
+          <option value="Xbox">Xbox</option>
+          <option value="Nintendo Switch">Switch</option>
         </select>
       </div>
 

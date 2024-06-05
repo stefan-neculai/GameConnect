@@ -5,6 +5,7 @@ export interface User {
   email: string;
   bio: string;
   profilePicture: string;
+  banner: string;
   follows: string[];
   followers: string[];
   // Add other user-related fields as needed

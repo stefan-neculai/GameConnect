@@ -22,7 +22,9 @@ router.post('/signup', signUp);
 router.post('/login', login);
 router.get('/users', authenticateToken);
 router.get('/user/:id', authenticateToken, getUserById);
-router.put('/user/update/:id', authenticateToken, upload.single('profilePicture'), updateUser);
+router.put('/user/update/:id', authenticateToken, upload.fields([
+  { name: 'profilePicture', maxCount: 1 },
+  { name: 'banner', maxCount: 1 }]), updateUser);
 router.put('/user/favorite/:id', authenticateToken, addGameToFavorites);
 router.put('/user/follow/:id', authenticateToken, followUser);
 
