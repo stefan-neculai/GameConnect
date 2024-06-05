@@ -1,36 +1,39 @@
 import React, { useState } from 'react';
 
 interface EditProfileModalProps {
-  isOpen: boolean;
+  onProfileSubmit: (profile: { bio: string, file: File | undefined }) => void;
   onClose: () => void;
-  onProfileSubmit: (profile: { bio: string }) => void;
 }
 
-const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onClose, onProfileSubmit }) => {
+const EditProfileModal: React.FC<EditProfileModalProps> = ({ onProfileSubmit, onClose }) => {
   const [bio, setBio] = useState('');
+  const [file, setFile] = useState<File | undefined>();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    onProfileSubmit({ bio });
-    onClose(); // Close modal after submit
+    onProfileSubmit({ bio, file });
   };
 
-  if (!isOpen) return null;
+  const handleFileChange = (e : any) => {
+    setFile(e.target.files[0]);
+  };
 
   return (
-    <div className="modalOverlay">
-      <div className="modalContent">
-        <h2>Edit Profile</h2>
-        <form onSubmit={handleSubmit}>
-          <label>
-            Bio:
-            <textarea value={bio} onChange={e => setBio(e.target.value)} />
-          </label>
-          <button type="submit">Save</button>
-          <button type="button" onClick={onClose}>Close</button>
-        </form>
-      </div>
-    </div>
+    <>
+      <h2>Edit Profile</h2>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Bio:
+          <textarea value={bio} onChange={e => setBio(e.target.value)} />
+        </label>
+        <label>
+          Profile Picture:
+          <input type="file" onChange={handleFileChange} accept="image/*"  />
+        </label>
+      </form>
+      <button onClick={onClose}>Close</button>
+      <button onClick={handleSubmit} type="submit"> Save changes </button>
+    </>
   );
 };
 

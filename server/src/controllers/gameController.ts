@@ -9,12 +9,30 @@ export const getGames = async (req: Request, res: Response): Promise<void> => {
     const limit: number = parseInt(req.query.limit as string) || 10;
     const skip: number = (page - 1) * limit;
     const search: string = (req.query.search as string) || '';
-
+    const genre: string = (req.query.genre as string) || '';
+    const platform: string = (req.query.platform as string) || '';
+    const mode: string = (req.query.mode as string) || '';
 
     try {
-        // Create a search query object
-        const searchQuery = search ? { name: { $regex: search, $options: 'i' } } : {};
-    
+        // Create a search query object for genre, platform, multiplayer options
+        const searchQuery: any = {};
+
+        if (search) {
+            searchQuery.name = { $regex: search, $options: 'i' };
+        }
+
+        // check if the genres array contains the searched genre
+        if (genre != 'all') {
+            searchQuery.genres = { $elemMatch: { name: genre } };
+        }
+        if (platform != 'all') {
+            searchQuery.platform = { $elemMatch: { name: platform }};
+        }
+        if (mode != 'all') {
+            searchQuery.game_modes = { $elemMatch: { name: mode }};
+        }
+
+        console.log(searchQuery);
         // Get the total count of games that match the search query
         const totalGames = await Game.countDocuments(searchQuery);
     

@@ -24,25 +24,52 @@
 }
 
 .pagination {
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-  }
-  
-    .pagination button {
-      background-color: white;
-      color: black ;
-      border: none;
-      padding: 5px 10px;
-      margin: 0 5px;
-      cursor: pointer;
-    }
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
 
-    .pagination button:hover {
-      background-color: #f8f8f8;
-    }
-  
-  .pagination button:disabled {
-    color: #999;
-    cursor: not-allowed;
-  }
+.pagination button {
+  background-color: white;
+  color: black ;
+  border: none;
+  padding: 5px 10px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.pagination button:hover {
+  background-color: #f8f8f8;
+}
+
+.pagination button:disabled {
+color: #999;
+cursor: not-allowed;
+}
+
+.gamesInputs {
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 12px;
+  height: 36px;
+  padding: 5px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.gamesInputs input{
+  border: none;
+  outline: none;
+  height: 100%;
+  flex-grow: 1;
+  font-size: large;
+  margin: 0 auto 0 10px;
+}
+
+.gamesInputs select {
+  border: none;
+  outline: none;
+  height: 100%;
+  font-size: large;
+}

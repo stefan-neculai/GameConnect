@@ -6,6 +6,7 @@ import EditProfileModal from '../components/EditProfileModal';
 import { useParams } from 'react-router-dom';
 import { Game } from '../types/Game';
 import { Link } from 'react-router-dom';
+import Modal from '../components/Modal';
 
 const Profile: React.FC = () => {
   const { user } = useAuth();
@@ -58,36 +59,27 @@ const Profile: React.FC = () => {
     }
   };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfilePicture(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleSubmit = async (profile: { bio: string }) => {
+  const handleSubmit = async (profile: { bio: string, file : File | undefined}) => {
     if (profile) {
-      // Here you should update the user data with the new profile picture
-      const response = await fetch('http://localhost:4000/api/user/update/' + id, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include', // Ensure cookies are sent with the request
-        body: JSON.stringify(profile)
-      });
-
-      if(response.ok) { 
-        console.log('User updated successfully');
+      const formData = new FormData();
+      formData.append('bio', profile.bio);
+      if (profile.file) {
+        formData.append('profilePicture', profile.file);
       }
 
-      setEditing(false);
+      const response = await fetch('http://localhost:4000/api/user/update/' + id, {
+        method: 'PUT',
+        credentials: 'include', // Ensure cookies are sent with the request
+        body: formData
+      });
+
+      if (response.ok) {
+        console.log('User updated successfully');
+        setModalOpen(false);
+      }
     }
   };
+
 
   const followUser = async () => {
     if (user) {
@@ -120,22 +112,20 @@ const Profile: React.FC = () => {
       }
     }
   }
-  
 
   if (!userData) {
     return <div>Loading...</div>;
   }
 
+  const defaultPicURL = "https://t3.ftcdn.net/jpg/03/58/90/78/360_F_358907879_Vdu96gF4XVhjCZxN2kCG0THTsSQi8IhT.jpg";
   return (
     <div className="profilePage">
-      <EditProfileModal 
-        isOpen={isModalOpen} 
-        onClose={() => setModalOpen(false)}
-        onProfileSubmit={handleSubmit}
-      />
-
+      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
+        <EditProfileModal onProfileSubmit={handleSubmit} onClose={() => setModalOpen(false)}/>
+      </Modal>
+      <img className="banner" src="https://media.istockphoto.com/id/157524162/photo/highway-to-the-sunset.jpg?s=612x612&w=0&k=20&c=sGyNGXRjHV7r3pT93wexWJdiEMfe5lyBmv-GvCoZftQ="/>
       <div className="profileHeader">
-        <img src="https://t3.ftcdn.net/jpg/03/58/90/78/360_F_358907879_Vdu96gF4XVhjCZxN2kCG0THTsSQi8IhT.jpg"/>
+        <img src={userData.profilePicture? "http://localhost:4000/" + userData.profilePicture : defaultPicURL}/>
         <div className="profileHeaderRight">
           <div className="profileHeaderTopRight">
             <h2>{userData.username}</h2>

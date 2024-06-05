@@ -72,7 +72,8 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
 export const updateUser = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   const { username, email, password, profilePicture, bio } = req.body;
-  try {
+  
+  try { 
     const user = await User.findOne({ _id : id });
     if (!user) {
       res.status(404).send('User not found');
@@ -84,8 +85,8 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
       user.email = email;
     if(password)
       user.password = password;
-    if(profilePicture)
-      user.profilePicture = profilePicture;
+    if(req.file)
+      user.profilePicture = req.file.path;
     if(bio)
       user.bio = bio;
     await user.save();
