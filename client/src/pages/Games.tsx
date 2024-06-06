@@ -75,6 +75,10 @@ const Games: React.FC = () => {
           <option value="Multiplayer">Multiplayer</option>
           <option value="Single player">Singleplayer</option>
           <option value="Co-operative">Co-operative</option>
+          <option value="Split screen">Split screen</option>
+          <option value="Massively Multiplayer Online (MMO)">MMO</option>
+          <option value="Battle Royale">Battle Royale</option>
+
         </select>
         <select 
           value={genre} 
@@ -89,6 +93,19 @@ const Games: React.FC = () => {
           <option value="Strategy">Strategy</option>
           <option value="Real Time Strategy (RTS)"> RTS </option>
           <option value="MOBA" > MOBA </option>
+          <option value="Simulator"> Simulator </option>
+          <option value="Sport"> Sport </option>
+          <option value="Racing"> Racing </option>
+          <option value="Fighting"> Fighting </option>
+          <option value="Music"> Music </option>
+          <option value="Puzzle"> Puzzle </option>
+          <option value="Indie"> Indie </option>
+          <option value="Pinball"> Pinball </option>
+          <option value="Tactical"> Tactical </option>
+          <option value="Hack and slash/Beat 'em up"> Hack and slash </option>
+          <option value="Quiz/Trivia"> Quiz </option>
+          <option value="Turn-based strategy (TBS)"> Turn-based strategy </option>
+          <option value="Visual Novel"> Visual Novel </option>
 
         </select>
         <select 

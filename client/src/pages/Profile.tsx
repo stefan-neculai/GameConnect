@@ -7,6 +7,8 @@ import { useParams } from 'react-router-dom';
 import { Game } from '../types/Game';
 import { Link } from 'react-router-dom';
 import Modal from '../components/Modal';
+import Followers from '../components/Followers';
+import Following from '../components/Following';
 
 
 const Profile: React.FC = () => {
@@ -17,6 +19,8 @@ const Profile: React.FC = () => {
   const [editUser, setEditUser] = useState<User | null>(null);
   const [profilePicture, setProfilePicture] = useState<string | ArrayBuffer | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isFollowersModalOpen, setFollowersModalOpen] = useState(false);
+  const [isFollowingModalOpen, setFollowingModalOpen] = useState(false);
   const [favoriteGames, setFavoriteGames] = useState<Game[]>([]);
 
   useEffect(() => {
@@ -84,7 +88,7 @@ const Profile: React.FC = () => {
   };
 
 
-  const followUser = async () => {
+  const followUser = async (id : string | undefined) => {
     if (user) {
       const response = await fetch(`http://localhost:4000/api/user/follow/${id}`, {
         method: 'PUT',
@@ -100,7 +104,7 @@ const Profile: React.FC = () => {
     }
   };
 
-  const unfollowUser = async () => {
+  const unfollowUser = async (id : string | undefined) => {
     if (user) {
       const response = await fetch(`http://localhost:4000/api/user/unfollow/${id}`, {
         method: 'PUT',
@@ -126,6 +130,12 @@ const Profile: React.FC = () => {
       <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
         <EditProfileModal onProfileSubmit={handleSubmit} onClose={() => setModalOpen(false)}/>
       </Modal>
+      <Modal isOpen={isFollowersModalOpen} onClose={() => setFollowersModalOpen(false)}>
+        <Followers followUser={followUser} unfollowUser={unfollowUser} onClose={() => setFollowersModalOpen(false)}/>
+      </Modal>
+      <Modal isOpen={isFollowingModalOpen} onClose={() => setFollowingModalOpen(false)}>
+        <Following followUser={followUser} unfollowUser={unfollowUser} onClose={() => setFollowingModalOpen(false)}/>
+      </Modal>
       <img className="banner" src={userData.banner? "http://localhost:4000/" + userData.banner : defaultPicURL}/>
       <div className="profileHeader">
         <img className="profilePicture" src={userData.profilePicture? "http://localhost:4000/" + userData.profilePicture : defaultPicURL}/>
@@ -134,12 +144,12 @@ const Profile: React.FC = () => {
             <h2>{userData.username}</h2>
             {id === user?.id && <button onClick={() => setModalOpen(true)}> Edit Profile </button>}
             {user && userData.followers.includes(user.id)?
-              <button onClick={unfollowUser}> Unfollow </button>
-              : id !== user?.id && <button onClick={followUser}> Follow </button>}
+              <button onClick={() => unfollowUser(id)}> Unfollow </button>
+              : id !== user?.id && <button onClick={() => followUser(id)}> Follow </button>}
           </div>
           <div className="userCounts">
-            <p> {userData.followers.length} followers </p>
-            <p> {userData.follows.length} following </p>
+            <p onClick={() => setFollowersModalOpen(true)}> {userData.followers.length} followers </p>
+            <p onClick={() => setFollowingModalOpen(true)}> {userData.follows.length} following </p>
             <p> 20 posts </p>
           </div>
           <p>{userData.bio}</p>

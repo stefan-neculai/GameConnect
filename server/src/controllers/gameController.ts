@@ -104,3 +104,34 @@ export const getSimilarGames = async (req: Request, res: Response): Promise<void
     }
 }
 
+export const getAllGenres = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const genres = await Game.distinct('genres.name');
+        res.status(200).json(genres);
+    }
+    catch (err: any) {
+        res.status(500).send('Error getting genres: ' + err.message);
+    }
+}
+
+export const getAllPlatforms = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const platforms = await Game.distinct('platforms.name');
+        res.status(200).json(platforms);
+    }
+    catch (err: any) {
+        res.status(500).send('Error getting platforms: ' + err.message);
+    }
+}
+
+export const getAllGameModes = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const gameModes = await Game.distinct('game_modes.name');
+        res.status(200).json(gameModes);
+    }
+    catch (err: any) {
+        res.status(500).send('Error getting game modes: ' + err.message);
+    }
+}
+
+

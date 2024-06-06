@@ -1,5 +1,5 @@
 import express from 'express';
-import { signUp, login, getUserById, updateUser, addGameToFavorites, followUser } from '../controllers/userController';
+import { signUp, login, getUserById, updateUser, addGameToFavorites, followUser, getFollowers, getFollowing } from '../controllers/userController';
 import authenticateToken from '../middleware/auth';
 
 const multer = require('multer');
@@ -27,5 +27,8 @@ router.put('/user/update/:id', authenticateToken, upload.fields([
   { name: 'banner', maxCount: 1 }]), updateUser);
 router.put('/user/favorite/:id', authenticateToken, addGameToFavorites);
 router.put('/user/follow/:id', authenticateToken, followUser);
+router.put('/user/unfollow/:id', authenticateToken, followUser);
+router.get('/user/followers/:id', authenticateToken, getFollowers);
+router.get('/user/following/:id', authenticateToken, getFollowing);
 
 export default router;

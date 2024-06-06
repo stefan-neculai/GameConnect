@@ -1,18 +1,10 @@
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
+html {
+  overflow-y: overlay;
+} 
 .App-header {
   background-color: #282c34;
   height: 10vh;
-  width: 100vw;
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -59,7 +51,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 25px;
+  width: 100%;
 }
 
   /* Adding some styles for form elements for better aesthetics */

@@ -160,6 +160,43 @@ export const followUser = async (req: Request, res: Response): Promise<void> => 
   }
 }
 
+export const getFollowers = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+  try {
+    // get the user with id
+    const user = await User.findOne({ _id : id });
+    if (!user) {
+      res.status(404).send('User not found');
+      return;
+    }
+    // get the followers of the user
+    const followers = await User.find({ _id : { $in : user.followers } });
+    res.status(200).json(followers);
+  }
+  catch (err: any) {
+    res.status(500).send('Error getting followers: ' + err.message);
+  }
+}
+
+export const getFollowing = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+  try {
+    // get the user with id
+    const user = await User.findOne({ _id : id }); 
+    if (!user) {
+      res.status(404).send('User not found');
+      return;
+    }
+    // get the users the user follows
+    const following = await User.find({ _id : { $in : user.follows } });
+    res.status(200).json(following);
+  }
+  catch (err: any) {
+    res.status(500).send('Error getting following: ' + err.message);
+  }
+}
+
+
 
 
 
