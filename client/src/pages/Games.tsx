@@ -20,7 +20,7 @@ const Games: React.FC = () => {
   };
 
   const fetchGames = async (page : number, limit : number, search : string, genre : string, platform : string, mode :string) => {
-    const response = await fetch(`http://localhost:4000/api/games?page=${page}&limit=${limit}&search=${search}&genre=${genre}&platform=${platform}&mode=${mode}`, {
+    const response = await fetch(`https://localhost:4000/api/games?page=${page}&limit=${limit}&search=${search}&genre=${genre}&platform=${platform}&mode=${mode}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'

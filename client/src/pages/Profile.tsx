@@ -25,7 +25,7 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch('http://localhost:4000/api/user/' + id, {
+      const response = await fetch('https://localhost:4000/api/user/' + id, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ const Profile: React.FC = () => {
     };
 
     const fetchFavoriteGames = async () => {
-      const response = await fetch(`http://localhost:4000/api/games/favorite/${id}`, {
+      const response = await fetch(`https://localhost:4000/api/games/favorite/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -74,7 +74,7 @@ const Profile: React.FC = () => {
       if (profile.banner) {
         formData.append('banner', profile.banner);
       }
-      const response = await fetch('http://localhost:4000/api/user/update/' + id, {
+      const response = await fetch('https://localhost:4000/api/user/update/' + id, {
         method: 'PUT',
         credentials: 'include', // Ensure cookies are sent with the request
         body: formData
@@ -90,7 +90,7 @@ const Profile: React.FC = () => {
 
   const followUser = async (id : string | undefined) => {
     if (user) {
-      const response = await fetch(`http://localhost:4000/api/user/follow/${id}`, {
+      const response = await fetch(`https://localhost:4000/api/user/follow/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -106,7 +106,7 @@ const Profile: React.FC = () => {
 
   const unfollowUser = async (id : string | undefined) => {
     if (user) {
-      const response = await fetch(`http://localhost:4000/api/user/unfollow/${id}`, {
+      const response = await fetch(`https://localhost:4000/api/user/unfollow/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -136,9 +136,9 @@ const Profile: React.FC = () => {
       <Modal isOpen={isFollowingModalOpen} onClose={() => setFollowingModalOpen(false)}>
         <Following followUser={followUser} unfollowUser={unfollowUser} onClose={() => setFollowingModalOpen(false)}/>
       </Modal>
-      <img className="banner" src={userData.banner? "http://localhost:4000/" + userData.banner : defaultPicURL}/>
+      <img className="banner" src={userData.banner? "https://localhost:4000/" + userData.banner : defaultPicURL}/>
       <div className="profileHeader">
-        <img className="profilePicture" src={userData.profilePicture? "http://localhost:4000/" + userData.profilePicture : defaultPicURL}/>
+        <img className="profilePicture" src={userData.profilePicture? "https://localhost:4000/" + userData.profilePicture : defaultPicURL}/>
         <div className="profileHeaderRight">
           <div className="profileHeaderTopRight">
             <h2>{userData.username}</h2>

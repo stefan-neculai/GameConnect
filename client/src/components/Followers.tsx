@@ -18,7 +18,7 @@ const Followers: React.FC<FollowersProps> = ({ followUser, unfollowUser, onClose
     
     React.useEffect(() => {
         const fetchFollowers = async () => {
-            const response = await fetch(`http://localhost:4000/api/user/followers/${id}`, {
+            const response = await fetch(`https://localhost:4000/api/user/followers/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -42,7 +42,7 @@ const Followers: React.FC<FollowersProps> = ({ followUser, unfollowUser, onClose
                 {followers.map((follower, index) => (
                     <li key={index}>
                         <Link to={`/profile/${follower._id}`}>
-                            <img className="profilePicture" src={follower.profilePicture? "http://localhost:4000/" + follower.profilePicture : "http://localhost:4000/images/default.jpg"} alt="Profile Picture"/>
+                            <img className="profilePicture" src={follower.profilePicture? "https://localhost:4000/" + follower.profilePicture : "https://localhost:4000/images/default.jpg"} alt="Profile Picture"/>
                             <p></p>{follower.username}
                         </Link>
                         {user && follower.followers.includes(user.id)?

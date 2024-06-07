@@ -49,7 +49,7 @@ const SignupForm: React.FC = () => {
             console.log('Form is valid, submit data:', formData);
             // Submit form
             setLoading(true);
-            const response = await fetch('http://localhost:4000/api/signup', {
+            const response = await fetch('https://localhost:4000/api/signup', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'

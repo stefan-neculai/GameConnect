@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import https from 'https';
+import fs from 'fs';
 import path from 'path';
 import cookieParser from 'cookie-parser'
 import connectDB from './config/mongo';
@@ -27,6 +29,13 @@ app.use('/api', reviewRoutes);
 // Serve static files from the 'images' directory
 app.use('/images', express.static(path.join(__dirname, '../images')));
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+// SSL options
+const options = {
+  key: fs.readFileSync(path.join(__dirname, '../cert/private.key')),
+  cert: fs.readFileSync(path.join(__dirname, '../cert/certificate.crt'))
+};
+
+
+https.createServer(options, app).listen(port, () => {
+  console.log(`Server is running on https://localhost:${port}`);
 });

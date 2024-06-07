@@ -21,12 +21,12 @@ const GameDetails: React.FC = () => {
   const [similar_games, setSimilarGames] = useState<Game[]>([]);
   const { id } = useParams<RouteParams>();
   const { user } = useAuth();
-  const defaultPicURL = "http://localhost:4000/images/default.jpg";
+  const defaultPicURL = "https://localhost:4000/images/default.jpg";
 
 
   useEffect(() => {
     async function fetchGame() {
-      const response = await fetch(`http://localhost:4000/api/game/${id}`, {
+      const response = await fetch(`https://localhost:4000/api/game/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -40,7 +40,7 @@ const GameDetails: React.FC = () => {
     }
 
     async function fetchSimilarGames() {
-      const response = await fetch(`http://localhost:4000/api/games/similar/${id}`, {
+      const response = await fetch(`https://localhost:4000/api/games/similar/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -55,7 +55,7 @@ const GameDetails: React.FC = () => {
     }
 
     async function fetchReviews() {
-      const response = await fetch(`http://localhost:4000/api/reviews/game/${id}`, {
+      const response = await fetch(`https://localhost:4000/api/reviews/game/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -87,7 +87,7 @@ const GameDetails: React.FC = () => {
       content: review.content,
       }
 
-    const response = fetch(`http://localhost:4000/api/review/create`, {
+    const response = fetch(`https://localhost:4000/api/review/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -104,7 +104,7 @@ const GameDetails: React.FC = () => {
 
   async function addGameToFavorites() {
     if(user) {
-      const response = await fetch(`http://localhost:4000/api/user/favorite/${user.id}`, {
+      const response = await fetch(`https://localhost:4000/api/user/favorite/${user.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -156,7 +156,7 @@ const GameDetails: React.FC = () => {
             {reviews.map(review => (
               <div key={review._id} className="review">
                 <div className="reviewAuthor">
-                  <img src={review.author.profilePic? "http://localhost:4000/" + review.author.profilePic : defaultPicURL} alt="Author"/>
+                  <img src={review.author.profilePic? "https://localhost:4000/" + review.author.profilePic : defaultPicURL} alt="Author"/>
                   <Link to={`/profile/${review.author.userId}`}>{review.author.username}</Link>
                 </div>
                 <div className="reviewContent">
