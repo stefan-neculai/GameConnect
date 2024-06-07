@@ -59,6 +59,8 @@
     gap: 10px;
 }
 
+
+
 /* For medium-sized screens, reduce to 3 columns */
 @media (max-width: 1024px) {
     .favoriteGamesList {

@@ -13,6 +13,7 @@ import { useAuth } from './context/AuthContext';
 import Games from './pages/Games';
 import Game from './pages/Game';
 import GameDetails from './pages/Game';
+import Communities from './pages/Communities';
 
 
 const App: React.FC = () => {
@@ -44,6 +45,9 @@ const App: React.FC = () => {
               <li>
                 <Link to="/games">Games</Link>
               </li>
+              <li>
+                <Link to="/communities"> Communities </Link>
+              </li>
               {!isLoggedIn &&
               <>       
                 <li>
@@ -65,6 +69,7 @@ const App: React.FC = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/games" element={<Games />} />
+            <Route path='/communities' element={<Communities />} />
             <Route path="/game/:id" element={<GameDetails />} />
             <Route path="/login" element={<Login />} />
             {user &&  <Route path="/profile/:id" element={<Profile />} /> }

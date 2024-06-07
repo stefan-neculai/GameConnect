@@ -15,9 +15,6 @@ const Profile: React.FC = () => {
   const { user } = useAuth();
   const { id } = useParams();
   const [userData, setUserData] = useState<User | null>(null);
-  const [editing, setEditing] = useState<boolean>(false);
-  const [editUser, setEditUser] = useState<User | null>(null);
-  const [profilePicture, setProfilePicture] = useState<string | ArrayBuffer | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [isFollowersModalOpen, setFollowersModalOpen] = useState(false);
   const [isFollowingModalOpen, setFollowingModalOpen] = useState(false);
@@ -56,13 +53,6 @@ const Profile: React.FC = () => {
     fetchFavoriteGames();
 
   }, [id]);
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    if (editUser) {
-      setEditUser({ ...editUser, [name]: value });
-    }
-  };
 
   const handleSubmit = async (profile: { bio: string, profilePic : File | undefined, banner : File | undefined}) => {
     if (profile) {

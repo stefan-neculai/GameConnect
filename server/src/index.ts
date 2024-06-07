@@ -8,6 +8,7 @@ import connectDB from './config/mongo';
 import userRoutes from './routes/userRoutes';
 import gameRoutes from './routes/gameRoutes';
 import reviewRoutes from './routes/reviewRoutes';
+import communityRoutes from './routes/communityRoutes';
 
 
 const app = express();
@@ -25,6 +26,7 @@ connectDB();
 app.use('/api', userRoutes);
 app.use('/api', gameRoutes);
 app.use('/api', reviewRoutes);
+app.use('/api', communityRoutes);
 
 // Serve static files from the 'images' directory
 app.use('/images', express.static(path.join(__dirname, '../images')));

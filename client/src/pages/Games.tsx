@@ -71,7 +71,7 @@ const Games: React.FC = () => {
           value={mode} 
           onChange={handleModeChange}
         >
-          <option value="all"> Game Mode </option>
+          <option value=""> Game Mode </option>
           <option value="Multiplayer">Multiplayer</option>
           <option value="Single player">Singleplayer</option>
           <option value="Co-operative">Co-operative</option>
@@ -84,7 +84,7 @@ const Games: React.FC = () => {
           value={genre} 
           onChange={handleGenreChange}
         >
-          <option value="all">Genre</option>
+          <option value="">Genre</option>
           <option value="Shooter">Shooter</option>
           <option value="Adventure">Adventure</option>
           <option value="Platform"> Platformer </option>
@@ -112,7 +112,7 @@ const Games: React.FC = () => {
           value={platform} 
           onChange={handlePlatformChange}
         >
-          <option value="all">Platform</option>
+          <option value="">Platform</option>
           <option value="PC (Microsoft Windows)">PC</option>
           <option value="Linux">Linux</option>
           <option value="Mac">Mac</option>

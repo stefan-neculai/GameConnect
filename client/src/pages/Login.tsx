@@ -49,7 +49,7 @@ const Login: React.FC = () => {
 
     if (response.ok) {
       const data = await response.json(); // Parsing the JSON response body
-      document.cookie = `token=${data.token}; path=/; max-age=3600;`; // Set cookie manually
+      document.cookie = `token=${data.token}; path=/; max-age=3600; domain=localhost; secure; samesite=None`; // Set cookie manually
       console.log('Login successful');
       handleLogin();
       navigate('/');

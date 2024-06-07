@@ -22,17 +22,17 @@ export const getGames = async (req: Request, res: Response): Promise<void> => {
         }
 
         // check if the genres array contains the searched genre
-        if (genre != 'all') {
+        if (genre != '') {
             searchQuery.genres = { $elemMatch: { name: genre } };
         }
-        if (platform != 'all') {
+        if (platform != '') {
             searchQuery.platforms = { $elemMatch: { name: platform }};
         }
-        if (mode != 'all') {
+        if (mode != '') {
             searchQuery.game_modes = { $elemMatch: { name: mode }};
         }
 
-        //console.log(searchQuery);
+        console.log(searchQuery);
         // Get the total count of games that match the search query
         const totalGames = await Game.countDocuments(searchQuery);
     
