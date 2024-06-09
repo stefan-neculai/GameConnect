@@ -10,9 +10,9 @@ const Games: React.FC = () => {
   const [lastPage, setlastPage] = useState<number>(0);
   const [limit] = useState<number>(10);  // Number of games per page
   const [search, setSearch] = useState<string>('');
-  const [mode, setMode] = useState('all');
-  const [genre, setGenre] = useState('all');
-  const [platform, setPlatform] = useState('all');
+  const [mode, setMode] = useState('');
+  const [genre, setGenre] = useState('');
+  const [platform, setPlatform] = useState('');
 
   const changePage = (newPage: number) => {
     setCurrentPage(newPage);
@@ -38,7 +38,7 @@ const Games: React.FC = () => {
   useEffect(() => {
     
 
-    fetchGames(1,10,'', 'all', 'all', 'all');
+    fetchGames(1,10,'', '', '', '');
   }, []);
 
   const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {

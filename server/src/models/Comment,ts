@@ -1,0 +1,24 @@
+import mongoose, { Document, Schema } from 'mongoose';
+
+// Define an interface for the Comment document
+interface IComment extends Document {
+  content: string;
+  author: mongoose.Types.ObjectId; // Reference to the User who made the comment
+  post: mongoose.Types.ObjectId; // Reference to the Post the comment belongs to
+  createdAt: Date;
+  likedBy: mongoose.Types.ObjectId[]; // Array of user IDs who have liked the comment
+}
+
+// Create the schema using the defined interface
+const commentSchema = new Schema<IComment>({
+  content: { type: String, required: true },
+  author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  post: { type: Schema.Types.ObjectId, ref: 'Post', required: true },
+  createdAt: { type: Date, default: Date.now },
+  likedBy: [{ type: Schema.Types.ObjectId, ref: 'User' }] // References to users who have liked the comment
+});
+
+// Create the model from the schema
+const Comment = mongoose.model<IComment>('Comment', commentSchema);
+
+export default Comment;
