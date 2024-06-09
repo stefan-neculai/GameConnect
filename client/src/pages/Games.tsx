@@ -38,7 +38,7 @@ const Games: React.FC = () => {
   useEffect(() => {
     
 
-    fetchGames(1,10,'', '', '', '');
+    fetchGames(1,10,'', '', '', ' ');
   }, []);
 
   const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {

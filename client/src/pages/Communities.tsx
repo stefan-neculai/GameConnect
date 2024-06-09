@@ -3,12 +3,15 @@ import ICommunity from '../types/Community';
 import AddCommunityModal from '../components/AddCommunityModal';
 import Modal from '../components/Modal';
 import { useAuth } from '../context/AuthContext';
+import './Communities.css';
+import { Link, useParams } from 'react-router-dom';
 
 const Communities: React.FC = () => {
     const [communities, setCommunities] = useState<ICommunity[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { user } = useAuth();
-
+    const { id } = useParams();
+    
     useEffect(() => {
         async function fetchCommunities() {
             const response = await fetch('https://localhost:4000/api/community', {
@@ -55,7 +58,19 @@ const Communities: React.FC = () => {
         }
     }
 
-
+    const joinCommunity = async (communityId: string) => {
+        const response = await fetch(`https://localhost:4000/api/community/join/${communityId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data);
+        }
+    }
     return (
         <div>
             <h1>Communities Page</h1>
@@ -65,14 +80,25 @@ const Communities: React.FC = () => {
                 <AddCommunityModal onCommunitySubmit={onCommunitySubmit} onClose={() => setIsModalOpen(false)} />
             </Modal>
             <h1> Communities List </h1>
-            <div className="communitiesGrid">
+            <div className="communitiesList">
                 {communities.map((community) => {
                     return (
-                        <div key={community._id}>
-                            <img src={`https://localhost:4000/api/community/${community._id}/icon`} alt="Community Icon" />
-                            <h2>{community.name}</h2>
-                            <p>{community.description}</p>
+                        
+                        <div key={community._id} className='communityItem'>
+                            <img src={community.communityIcon} alt="Community Icon" />
+                            <div className='communityInfo'>
+                            <Link to={`/community/${community._id}`}>
+                                <h2>{community.name}</h2>
+                            </Link>
+                                <p>{community.description}</p>
+                                <p> {community.members.length} Members</p>
+                                {user?.id && !community.members.includes(user?.id) &&  
+                                <button onClick={() => joinCommunity(community._id)}> Join Community </button>}
+                            </div>
+
                         </div>
+                 
+
                     );
                 })}
             </div>

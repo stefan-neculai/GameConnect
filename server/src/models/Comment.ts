@@ -1,9 +1,10 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import authorSchema, { IAuthor } from './Author';
 
 // Define an interface for the Comment document
 interface IComment extends Document {
   content: string;
-  author: mongoose.Types.ObjectId; // Reference to the User who made the comment
+  author: IAuthor; // Reference to the User who made the comment
   post: mongoose.Types.ObjectId; // Reference to the Post the comment belongs to
   createdAt: Date;
   likedBy: mongoose.Types.ObjectId[]; // Array of user IDs who have liked the comment
@@ -12,7 +13,7 @@ interface IComment extends Document {
 // Create the schema using the defined interface
 const commentSchema = new Schema<IComment>({
   content: { type: String, required: true },
-  author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  author: { type: authorSchema, required: true },
   post: { type: Schema.Types.ObjectId, ref: 'Post', required: true },
   createdAt: { type: Date, default: Date.now },
   likedBy: [{ type: Schema.Types.ObjectId, ref: 'User' }] // References to users who have liked the comment

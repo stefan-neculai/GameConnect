@@ -1,12 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import Game from './Game';
-
-// Define interfaces for each sub-document to improve type checking
-interface IAuthor {
-  userId: mongoose.Types.ObjectId;
-  username: string;
-  profilePic?: string;  // Marked as optional
-}
+import authorSchema, { IAuthor } from './Author';
 
 interface IReview extends Document {
   game: mongoose.Types.ObjectId;
@@ -20,11 +14,7 @@ interface IReview extends Document {
 // Create the schema using the defined interfaces
 const reviewSchema = new Schema<IReview>({
   game: { type: Schema.Types.ObjectId, ref: 'Game' },
-  author: {
-    userId: { type: Schema.Types.ObjectId, required: true },
-    username: { type: String, required: true },
-    profilePic: { type: String } // Optional
-  },
+  author: { type: authorSchema, required: true},
   rating: { type: Number, required: true },
   content: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },

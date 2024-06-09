@@ -1,0 +1,27 @@
+.communitiesList {
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.communityItem {
+    display: flex;
+    justify-content: start;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    
+}
+
+.communitiesList a {
+    text-decoration: none !important;
+    color: inherit;
+} 
+
+.communityInfo {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    justify-content: start;
+    flex-grow: 1;
+}

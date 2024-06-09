@@ -1,16 +1,12 @@
 import mongoose, { Document, Schema } from 'mongoose';
-
-// Define an interface for the author's reference
-interface IAuthor {
-    userId: mongoose.Types.ObjectId;
-    username: string;
-    profilePic?: string;  // Marked as optional
-}
+import authorSchema, { IAuthor } from './Author';
 
 // Define the main interface for the Post document
 interface IPost extends Document {
   author: IAuthor;
+  title: string;
   content: string;
+  photo?: string;
   community: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt?: Date;
@@ -19,10 +15,9 @@ interface IPost extends Document {
 
 // Create the schema using the defined interfaces
 const postSchema = new Schema<IPost>({
-  author: {
-    userId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
-    username: { type: String, required: true }
-  },
+  author: {type : authorSchema, required: true},
+  title: { type: String, required: true},
+  photo: { type: String },
   community: { type: Schema.Types.ObjectId, required: true, ref: 'Community' },
   content: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },

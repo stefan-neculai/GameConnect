@@ -1,0 +1,103 @@
+.makePostModal {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 400px;
+    margin: auto;
+    position: relative;
+  }
+  
+  .makePostModal h2 {
+    margin-top: 0;
+  }
+  
+  .makePostForm {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .makePostForm label {
+    margin: 10px 0 5px;
+  }
+  
+  .makePostForm input[type="text"],
+  .makePostForm textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .makePostForm textarea {
+    height: 80px;
+  }
+  
+  .searchInputLabel {
+    display: flex;
+    align-items: center;
+    cursor: text;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  
+  .searchInputLabel svg {
+    margin-left: 5px;
+    cursor: pointer;
+  }
+  
+  .searchResults {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    max-height: 150px;
+    overflow-y: auto;
+  }
+  
+  .searchResult {
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  
+  .searchResult img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+  
+  .postImageLabel {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  
+  .postImageLabel svg {
+    margin-right: 5px;
+  }
+  
+  .modalControls {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+  
+  .modalControls button {
+    margin-left: 10px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .modalControls button:hover {
+    background-color: #f0f0f0;
+  }
+  

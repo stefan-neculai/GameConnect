@@ -9,6 +9,8 @@ import userRoutes from './routes/userRoutes';
 import gameRoutes from './routes/gameRoutes';
 import reviewRoutes from './routes/reviewRoutes';
 import communityRoutes from './routes/communityRoutes';
+import postRoutes from './routes/postRoutes';
+import commentRoutes from './routes/commentRoutes';
 
 
 const app = express();
@@ -27,6 +29,8 @@ app.use('/api', userRoutes);
 app.use('/api', gameRoutes);
 app.use('/api', reviewRoutes);
 app.use('/api', communityRoutes);
+app.use('/api', postRoutes);
+app.use('/api', commentRoutes);
 
 // Serve static files from the 'images' directory
 app.use('/images', express.static(path.join(__dirname, '../images')));
