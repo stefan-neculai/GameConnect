@@ -8,7 +8,7 @@ export const getPosts = async (req: Request, res: Response) => {
   const limit: number = parseInt(req.query.limit as string) || 10;
   const skip: number = (page - 1) * limit;
   const communityIds: string[] = (req.query.communityIds as string).split(',');
-
+ 
   try {
     // Create a search query object for community
     const searchQuery: any = {};

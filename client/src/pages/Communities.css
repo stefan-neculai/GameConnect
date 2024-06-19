@@ -14,8 +14,9 @@
 }
 
 .communityItem img {
-    aspect-ratio: 1/1;
     height: 100%;
+    max-width: 300px;
+    object-fit: cover;
 }
 
 .communitiesList a {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ICommunity from '../types/Community';
@@ -19,6 +19,9 @@ const Community: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const observer = useRef<IntersectionObserver | null>(null);
   const { id } = useParams();
   const { user } = useAuth();
   const { timeSince, likePost, unlikePost, getPosts } = PostUtils();
@@ -26,11 +29,15 @@ const Community: React.FC = () => {
   useEffect(() => {
     // Fetch posts from API
     const fetchPosts = async () => {
-      const posts = await getPosts(page, limit, [id]);
-      if (posts) {
+      setLoading(true);
+      const postsData = await getPosts(page, limit, [id]);
+      if(total == 0)
+        setTotal(postsData.total);
+      if (postsData) {
         console.log(posts)
-        setPosts(posts.posts);
+        setPosts([...posts, ...postsData.posts]);
       }
+      setLoading(false);
     }
 
     const fetchCommunity = async () => {
@@ -48,9 +55,26 @@ const Community: React.FC = () => {
       }
     }
 
-    fetchCommunity();
+    if(page == 1)
+      fetchCommunity();
     fetchPosts();
-  }, []);
+  }, [page]);
+
+  const lastPostElementRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+          if(posts.length + limit <= total)
+            setPage(prevPage => prevPage + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [loading]
+  );
+
 
   const handlePostSubmit = async (post: { title: string; content: string; postImage: File | undefined }) => {
     // Submit post to API
@@ -124,29 +148,55 @@ const Community: React.FC = () => {
       </Modal>
       <h1>{community.name}</h1>
       <button onClick={() => setIsModalOpen(true)}> Add Post </button>
-      {posts && posts.map(post => (
-        <Link to={`/post/${post._id}`}>
-          <div key={post._id} className="postContainer">
-            <div className="postAuthor">
-              <img src={`https://localhost:4000/${post.author.profilePic}`} alt={post.author.username} />
-              <p>{post.author.username}</p>
-              <p> {timeSince(post.createdAt)}</p>
-            </div>
-            <h2>{post.title}</h2>
-            {/* Display the post image if it exists */}
-            {post?.photo && <img className="postPhoto" src={`https://localhost:4000/${post.photo}`} alt={post.title} />}
-            <p>{post.content}</p>
-            
-            <p className='likes'>{post.likedBy.length} 
-              <FontAwesomeIcon 
-              icon={user && post.likedBy.includes(user.id)? faHeart : faHeartOutline }
-              onClick={user && post.likedBy.includes(user.id)? (e) => handleUnlike(post._id, e) : (e) => handleLike(post._id, e)}
-              /></p>
-          </div>
-        </Link>
-
-       
-      ))}
+      {posts.map((post, index) => {
+        if (posts.length === index + 1) {
+          return (
+            <Link to={`/post/${post._id}`}>
+              <div key={post._id} ref={lastPostElementRef} className="postContainer">
+                <div className="postAuthor">
+                  <img src={`https://localhost:4000/${post.author.profilePic}`} alt={post.author.username} />
+                  <p>{post.author.username}</p>
+                  <p> {timeSince(post.createdAt)}</p>
+                </div>
+                <h2>{post.title}</h2>
+                {/* Display the post image if it exists */}
+                {post?.photo && <img className="postPhoto" src={`https://localhost:4000/${post.photo}`} alt={post.title} />}
+                <p>{post.content}</p>
+                
+                <p className='likes'>{post.likedBy.length} 
+                  <FontAwesomeIcon 
+                  icon={user && post.likedBy.includes(user.id)? faHeart : faHeartOutline }
+                  onClick={user && post.likedBy.includes(user.id)? (e) => handleUnlike(post._id, e) : (e) => handleLike(post._id, e)}
+                  /></p>
+              </div>
+            </Link>
+          );
+        } else {
+          return (
+            <Link to={`/post/${post._id}`}>
+              <div key={post._id} className="postContainer">
+                <div className="postAuthor">
+                  <img src={`https://localhost:4000/${post.author.profilePic}`} alt={post.author.username} />
+                  <p>{post.author.username}</p>
+                  <p> {timeSince(post.createdAt)}</p>
+                </div>
+                <h2>{post.title}</h2>
+                {/* Display the post image if it exists */}
+                {post?.photo && <img className="postPhoto" src={`https://localhost:4000/${post.photo}`} alt={post.title} />}
+                <p>{post.content}</p>
+                
+                <p className='likes'>{post.likedBy.length} 
+                  <FontAwesomeIcon 
+                  icon={user && post.likedBy.includes(user.id)? faHeart : faHeartOutline }
+                  onClick={user && post.likedBy.includes(user.id)? (e) => handleUnlike(post._id, e) : (e) => handleLike(post._id, e)}
+                  /></p>
+              </div>
+            </Link>
+          );
+        }
+      })}
+      {loading && <p>Loading...</p>}
+   
     </div>
   );
 };
