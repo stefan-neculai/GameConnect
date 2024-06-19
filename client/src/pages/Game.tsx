@@ -8,6 +8,8 @@ import { useAuth } from '../context/AuthContext';
 import { Review } from '../types/Review';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import GameUtils from '../utils/GameUtils';
+import { platform } from 'os';
 
 interface RouteParams {
   id: string;
@@ -22,7 +24,7 @@ const GameDetails: React.FC = () => {
   const { id } = useParams<RouteParams>();
   const { user } = useAuth();
   const defaultPicURL = "https://localhost:4000/images/default.jpg";
-
+  const { getRealeaseDay, getReleaseMonth, getReleaseYear } = GameUtils();
 
   useEffect(() => {
     async function fetchGame() {
@@ -131,7 +133,8 @@ const GameDetails: React.FC = () => {
           <p><strong>Developers:</strong> {game.involved_companies.map(ic => ic.company.name).join(', ')}</p>
           <p><strong>Genres:</strong> {game.genres.map(genre => genre.name).join(', ')}</p>
           <p><strong>Game Modes:</strong> {game.game_modes.map(mode => mode.name).join(', ')}</p>
-          <p><strong>Release Date:</strong> {new Date(game.first_release_date * 1000).toDateString()}</p>
+          <p><strong>Release Date:</strong> {getRealeaseDay(game) + " " + getReleaseMonth(game) + " " + getReleaseYear(game)}</p>
+          <p><strong>Platforms</strong> {game.platforms.map(platform => platform.name).join(', ')}</p>
         </div>
         <div className="gameOptions">
           <h1> <strong>{game.averageRating}</strong>/10  <FontAwesomeIcon icon={faStar} /></h1>
@@ -150,23 +153,30 @@ const GameDetails: React.FC = () => {
       {game.storyline && <p><strong>Storyline:</strong> {game.storyline}</p>}
 
       <div className="reviewsSimilarGamesWrapper">
+        {reviews.length === 0 && <h2> No reviews yet. Be the first to review this game!</h2>}
+        {reviews.length !== 0 &&
         <div className="reviewsWrapper">
           <h2> Reviews for {game.name}</h2>
           <div className="reviewsList">
             {reviews.map(review => (
-              <div key={review._id} className="review">
-                <div className="reviewAuthor">
-                  <img src={review.author.profilePic? "https://localhost:4000/" + review.author.profilePic : defaultPicURL} alt="Author"/>
-                  <Link to={`/profile/${review.author.userId}`}>{review.author.username}</Link>
+              <>
+                <div key={review._id} className="review">
+                  <div className="reviewAuthor">
+                    <img src={review.author.profilePic? "https://localhost:4000/" + review.author.profilePic : defaultPicURL} alt="Author"/>
+                    <Link to={`/profile/${review.author.userId}`}>{review.author.username}</Link>
+                  </div>
+                  <div className="reviewContent">
+                    <p>{review.content}</p>
+                    <p>Rating: {review.rating}</p>
+                  </div>
                 </div>
-                <div className="reviewContent">
-                  <p>{review.content}</p>
-                  <p>Rating: {review.rating}</p>
-                </div>
-              </div>
+              <hr/>
+              </>
+
             ))}
           </div>
         </div>
+        }
         
       {similar_games && similar_games.length > 0 && 
       <div className="similarGamesWrapper">

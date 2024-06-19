@@ -32,12 +32,12 @@ export const getGames = async (req: Request, res: Response): Promise<void> => {
             searchQuery.game_modes = { $elemMatch: { name: mode }};
         }
 
-        console.log(searchQuery);
+        
         // Get the total count of games that match the search query
         const totalGames = await Game.countDocuments(searchQuery);
-    
-        // Fetch the games that match the search query with pagination
-        const games = await Game.find(searchQuery).skip(skip).limit(limit);
+        
+        // Fetch the games that match the search query with pagination and that have the best average rating
+        const games = await Game.find(searchQuery).sort({ 'averageRating': -1 }).skip(skip).limit(limit);
     
         // Return the results along with pagination info
         res.status(200).json({

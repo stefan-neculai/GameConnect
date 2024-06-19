@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Game } from '../types/Game';
 import './Games.css';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 const Games: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
@@ -135,7 +137,8 @@ const Games: React.FC = () => {
           <Link to={`/game/${game._id}`} key={game._id}>
             <div className="gamePanel">
               <img src={"//images.igdb.com/igdb/image/upload/t_cover_big/" + game.cover.url.split("/")[7]}></img>
-              <p>{game.name + ` (${new Date(game.first_release_date * 1000).getFullYear()})`}</p  >
+              <p>{game.name + ` (${new Date(game.first_release_date * 1000).getFullYear()})`}</p>
+              <p> {game.averageRating} <FontAwesomeIcon icon={faStar}/></p>
             </div>
           </Link>
 
@@ -150,7 +153,7 @@ const Games: React.FC = () => {
         {currentPage > 2 && <button onClick={() => changePage(currentPage - 1)}> {currentPage - 1} </button> }
         <button onClick={() => changePage(currentPage)} disabled={currentPage === currentPage}> {currentPage} </button> 
         {currentPage < lastPage - 1  && <button onClick={() => changePage(currentPage + 1)}> {currentPage + 1} </button> }
-        {currentPage < lastPage - 3 && <button onClick={() => changePage(currentPage + 1)}> {currentPage + 2} </button> } 
+        {currentPage < lastPage - 3 && <button onClick={() => changePage(currentPage + 2)}> {currentPage + 2} </button> } 
         {currentPage < lastPage - 2 && <p> ... </p> }
         {currentPage != lastPage && <button onClick={() => changePage(lastPage)} disabled={currentPage === lastPage}> {lastPage} </button> }
         <button onClick={() => changePage(currentPage + 1)}  disabled={currentPage === lastPage}> Next </button>

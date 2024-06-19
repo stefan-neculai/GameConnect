@@ -76,9 +76,17 @@ main {
     cursor: pointer;
     transition: background-color 0.3s;
   }
+
+  .negativeButton {
+    background-color: #dc3545;
+  }
   
   button:hover {
     background-color: #0056b3;
+  }
+
+  .negativeButton:hover {
+    background-color: #c82333;
   }
   
 
@@ -86,5 +94,10 @@ main {
     height: 50%;
     margin: auto 50px auto auto;
 
+  }
+
+  a {
+    text-decoration: none;
+    color: black;
   }
   

@@ -1,7 +1,4 @@
 import { Request, Response } from 'express';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import User from '../models/User';
 import Community from '../models/Community';
 import Game from '../models/Game';
 
@@ -35,14 +32,14 @@ export const getCommunities = async (req: Request, res: Response): Promise<void>
 
 export const getCommunityById = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
-    console.log(id)
+
     try {
         const community = await Community.findOne({ _id : id });
         if (!community) {
             res.status(404).send('Community not found');
             return;
         }
-        console.log(community)
+
         res.status(200).json(community);
     } catch (err: any) {
         res.status(500).send('Error retrieving community: ' + err.message);
@@ -52,7 +49,7 @@ export const getCommunityById = async (req: Request, res: Response): Promise<voi
 export const createCommunity = async (req: Request, res: Response): Promise<void> => {
     try {
         let file_path = req.file?.path? `https://localhost:4000/${req.file?.path}` : '';
-        console.log(file_path)
+
         if(file_path == '') {
             // get image from related game
             const game = await Game.findOne({ _id: req.body.relatedGame });
@@ -84,7 +81,7 @@ export const joinCommunity = async (req: Request, res: Response): Promise<void> 
     const { id } = req.params;
     // get user id from jwt
     const user = (req as any).user;
-    console.log(user);
+
     try {
         console.log("join community")
         const community = await Community.findById({ _id: id });
@@ -102,8 +99,37 @@ export const joinCommunity = async (req: Request, res: Response): Promise<void> 
         const updatedCommunity = await community.save();
         res.json(updatedCommunity);
     } catch (err: any) {
-        console.log(err.message)
+
         res.status(500).json({ message: err.message });
     }
 }
+
+export const leaveCommunity = async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params;
+    // get user id from jwt
+    const user = (req as any).user;
+
+    try {
+        console.log("leave community")
+        const community = await Community.findById({ _id: id });
+        if (!community) {
+            res.status(404).json({ message: 'Community not found' });
+            return;
+        }
+
+        if (!community.members.includes(user.id)) {
+            res.status(400).json({ message: 'User not in community' });
+            return;
+        }
+
+        community.members = community.members.filter((member: any) => member.id === user.id);
+
+        const updatedCommunity = await community.save();
+        res.json(updatedCommunity);
+    } catch (err: any) {
+
+        res.status(500).json({ message: err.message });
+    }
+}
+
 

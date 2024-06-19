@@ -71,6 +71,21 @@ const Communities: React.FC = () => {
             console.log(data);
         }
     }
+
+    const leaveCommunity = async (communityId: string) => {
+        const response = await fetch(`https://localhost:4000/api/community/leave/${communityId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data);
+        }
+    }
+
     return (
         <div>
             <h1>Communities Page</h1>
@@ -94,6 +109,8 @@ const Communities: React.FC = () => {
                                 <p> {community.members.length} Members</p>
                                 {user?.id && !community.members.includes(user?.id) &&  
                                 <button onClick={() => joinCommunity(community._id)}> Join Community </button>}
+                                {user?.id && community.members.includes(user?.id) &&
+                                <button className="negativeButton" onClick={() => leaveCommunity(community._id)}> Leave Community </button>}
                             </div>
 
                         </div>

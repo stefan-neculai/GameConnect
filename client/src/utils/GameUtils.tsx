@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Game } from '../types/Game';
+import { get } from 'http';
 
 const GameUtils : any = () => {
 
@@ -18,11 +19,23 @@ const GameUtils : any = () => {
         return new Date(game.first_release_date * 1000).getFullYear();
     }
 
+    const getReleaseMonth = (game : Game) => {
+        // converts the month number to a string
+        const month = new Date(game.first_release_date * 1000).getMonth();
+        const monthString = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(new Date(0, month));
+        return monthString;
+    }
+
+    const getRealeaseDay = (game : Game) => {   
+        return new Date(game.first_release_date * 1000).getDate();
+    }
 
     return {
         getImageUrlBig,
         getImageUrlSmall,
         getReleaseYear,
+        getReleaseMonth,
+        getRealeaseDay
     }
 };
 

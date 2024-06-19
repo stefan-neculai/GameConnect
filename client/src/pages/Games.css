@@ -3,6 +3,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    gap: 10px;
 }
 
 .gamesGrid {
@@ -10,6 +11,34 @@
     width: 70vw;
     grid-template-columns: repeat(5, 1fr); /* Creates 5 columns, each taking up 1 fraction of the available space */
     grid-gap: 10px; /* Optional: adds space between the grid items */
+}
+
+/* 4 columns for medium screens (1024px and above) */
+@media (max-width: 1024px) {
+  .gamesGrid {
+      grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* 3 columns for small screens (768px and above) */
+@media (max-width: 768px) {
+  .gamesGrid {
+      grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 2 columns for extra small screens (480px and above) */
+@media (max-width: 480px) {
+  .gamesGrid {
+      grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 1 column for very small screens (below 480px) */
+@media (max-width: 320px) {
+  .gamesGrid {
+      grid-template-columns: 1fr;
+  }
 }
 
 .gamePanel {
@@ -72,4 +101,15 @@ cursor: not-allowed;
   outline: none;
   height: 100%;
   font-size: large;
+}
+
+.gamePanel {
+  transition: transform 0.3s ease-in-out;
+  outline: none;
+}
+
+.gamePanel:hover {
+  outline: 2px solid #007bff; /* Change the color to your preferred outline color */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
 }
