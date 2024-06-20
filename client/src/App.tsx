@@ -66,14 +66,14 @@ const App: React.FC = () => {
         </header>
         <main>
           <Routes>
-            <Route path="/" element={<ProtectedRoute Component={Home} isLoggedIn={isLoggedIn}/>} />
+            <Route path="/" element={<Home/>} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/games" element={<Games />} />
             <Route path='/communities' element={<Communities />} />
             <Route path='/community/:id' element={<Community />} />
-            <Route path='/post/:id' element={<Post />} /> 
+       
             <Route path="/game/:id" element={<GameDetails />} />
             <Route path="/login" element={<Login />} />
             {user &&  <Route path="/profile/:id" element={<Profile />} /> }

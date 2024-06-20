@@ -5,6 +5,7 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './context/AuthContext';
+import { PostsProvider } from './context/PostsContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,7 +13,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <BrowserRouter>
     <AuthProvider>
-      <App />
+      <PostsProvider>
+        <App />
+      </PostsProvider>
     </AuthProvider>
   </BrowserRouter>
 );

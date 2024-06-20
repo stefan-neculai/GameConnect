@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import Community from '../models/Community';
 import Game from '../models/Game';
+import User from '../models/User';
+import { Types } from 'mongoose';
 
 export const getCommunities = async (req: Request, res: Response): Promise<void> => {
     const page: number = parseInt(req.query.page as string) || 1;
@@ -97,6 +99,18 @@ export const joinCommunity = async (req: Request, res: Response): Promise<void> 
 
         community.members.push(user.id);
         const updatedCommunity = await community.save();
+
+        // add community id to user
+        const userDoc = await User.findById({ _id: user.id });
+        if (!userDoc) {
+            res.status(404).json({ message: 'User not found' });
+            return;
+        }
+        
+     
+        userDoc.communities.push(community.id);
+        await userDoc.save();
+
         res.json(updatedCommunity);
     } catch (err: any) {
 
@@ -125,6 +139,15 @@ export const leaveCommunity = async (req: Request, res: Response): Promise<void>
         community.members = community.members.filter((member: any) => member.id === user.id);
 
         const updatedCommunity = await community.save();
+
+        // remove community id from user
+        const userDoc = await User.findById({ _id: user.id });
+        if (!userDoc) {
+            res.status(404).json({ message: 'User not found' });
+            return;
+        }
+        userDoc.communities = userDoc.communities.filter((community) => community != updatedCommunity.id);
+        await userDoc.save();
         res.json(updatedCommunity);
     } catch (err: any) {
 

@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema({
     bio: { type: String, default: '' },
     favoriteGames: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Game' }],
     follows: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    communities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Community' }],
   }, { timestamps: true });
   
 

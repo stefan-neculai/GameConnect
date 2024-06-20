@@ -8,5 +8,6 @@ export interface User {
   banner: string;
   follows: string[];
   followers: string[];
+  communities: string[];
   // Add other user-related fields as needed
 }
