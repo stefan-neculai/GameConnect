@@ -41,17 +41,6 @@ export const getPosts = async (req: Request, res: Response) => {
       posts = await Post.find(searchQuery).sort(sort).skip(skip).limit(limit);
     }
 
-    // Logging for debugging
-    console.log('Search Query:', searchQuery);
-    console.log('Total Posts:', totalPosts);
-    console.log('Page:', page);
-    console.log('Limit:', limit);
-    console.log('Skip:', skip);
-    console.log('Sort:', sort);
-    posts.forEach((post) => { 
-      console.log('Post id', post._id, post.title, post.community);
-      }
-    );
     res.status(200).json({
       total: totalPosts,
       page,
@@ -65,6 +54,7 @@ export const getPosts = async (req: Request, res: Response) => {
 };
 
 export const createPost = async (req: Request, res: Response) => {
+  console.log(req.body);
   const newPost = new Post({
     title: req.body.title,
     content: req.body.content,
@@ -80,11 +70,13 @@ export const createPost = async (req: Request, res: Response) => {
     createdAt: new Date(),
     updatedAt: new Date(),
     photo: req.file ? req.file.path : undefined,
+    comments: [],
   });
   try {
     const savedPost = await newPost.save();
     res.status(201).json(savedPost);
   } catch (err: any) {
+    console.error('Error:', err.message);
     res.status(400).json({ message: err.message });
   }
 };
@@ -143,10 +135,7 @@ export const unlikePost = async (req: Request, res: Response) => {
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
-    post.likedBy = post.likedBy.filter((userId) => {
-      console.log(userId != user.id);
-      return userId != user.id;
-    });
+    post.likedBy = post.likedBy.filter((userId) =>  userId != user.id);
     const updatedPost = await post.save();
     res.json(updatedPost);
   } catch (err: any) {

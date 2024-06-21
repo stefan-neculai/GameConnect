@@ -15,6 +15,7 @@ interface IPost extends Document {
   createdAt: Date;
   updatedAt?: Date;
   likedBy: string[]; // Array of user IDs who have liked the post
+  comments: string[]; // Array of comment IDs
 }
 
 export default IPost;

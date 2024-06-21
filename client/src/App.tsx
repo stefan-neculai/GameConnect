@@ -16,6 +16,7 @@ import GameDetails from './pages/Game';
 import Communities from './pages/Communities';
 import Community from './pages/Community';
 import Post from './components/Post';
+import PostPage from './pages/PostPage';
 
 
 const App: React.FC = () => {
@@ -73,7 +74,7 @@ const App: React.FC = () => {
             <Route path="/games" element={<Games />} />
             <Route path='/communities' element={<Communities />} />
             <Route path='/community/:id' element={<Community />} />
-       
+            <Route path='/post/:id' element={<PostPage />} />
             <Route path="/game/:id" element={<GameDetails />} />
             <Route path="/login" element={<Login />} />
             {user &&  <Route path="/profile/:id" element={<Profile />} /> }

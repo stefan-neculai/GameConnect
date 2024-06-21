@@ -7,7 +7,7 @@ import { createComment, deleteComment, getComment, getComments, likeComment, unl
 const router = express.Router();
 
 router.get('/comments/:postId', authenticateToken, getComments);
-router.get('/comments/:id', authenticateToken, getComment);
+router.get('/comment/:id', authenticateToken, getComment);
 router.post('/comments/create', authenticateToken, createComment);
 router.put('/comments/:id/update', authenticateToken, updateComment);
 router.delete('/comments/:id/delete', authenticateToken, deleteComment);

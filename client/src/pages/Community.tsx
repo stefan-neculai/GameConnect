@@ -13,7 +13,7 @@ const Community: React.FC = () => {
   const [community, setCommunity] = useState<ICommunity>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useParams();
-  const { setPage, setPosts, setTotal } = usePosts();
+  const { setPage, setPosts, setTotal, setOrder } = usePosts();
   
   useEffect(() => {
     const fetchCommunity = async () => {
@@ -37,13 +37,19 @@ const Community: React.FC = () => {
       setTotal(0);
   }, []);
 
+  const onSuccesfulPost = () => {
+    console.log("succesful post")
+    setIsModalOpen(false);
+    setOrder('new');
+  }
+
   if (!community) {
     return <div>Loading...</div>;
   }
   return (
     <div className="communityContainer">
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <MakePostModal onClose={() => setIsModalOpen(false)} />
+        <MakePostModal onClose={onSuccesfulPost} />
       </Modal>
       <h1>{community.name}</h1>
       <button onClick={() => setIsModalOpen(true)}> Add Post </button>

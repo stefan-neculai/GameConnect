@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Post from "../components/Post";
 import { usePosts } from "../context/PostsContext";
+import { Link } from "react-router-dom";
 
 // Define the Posts component interface for the props
 // it includes communityids
@@ -9,22 +10,22 @@ interface PostsProps {
 }
 
 const Posts: React.FC<PostsProps> = ({ communityIds }) => {
-  const [order, setOrder] = useState('new'); 
   const {
     posts,
     page,
     limit,
     total,
     loading,
+    order,
     setPage,
-    setLimit,
     setLoading,
     setTotal,
     setPosts,
     handleLike,
     handleUnlike,
     lastPostElementRef,
-    getPosts
+    getPosts,
+    setOrder
   } = usePosts();
 
   useEffect(() => {
@@ -44,6 +45,7 @@ const Posts: React.FC<PostsProps> = ({ communityIds }) => {
   }, [page]);
 
   useEffect(() => {
+    console.log("wtf")
     setPosts([]);
     setTotal(0);
     setPage(1);
@@ -53,25 +55,25 @@ const Posts: React.FC<PostsProps> = ({ communityIds }) => {
     return <div>Loading...</div>;
   }
   return (
-    <>
-        <select onChange={(e) => setOrder(e.target.value)}>
+    <div className="postsWrapper">
+        <select value={order} onChange={(e) => setOrder(e.target.value)}>
             <option value="new">New</option>
             <option value="top">Top</option>
             <option value="old">Old</option>
         </select>
-        <div>
         {posts.map((post, index) => (
+              <Link to={`/post/${post._id}`}>
             <Post
             key={post._id}
             post={post}
-            handleLike={handleLike}
-            handleUnlike={handleUnlike}
             elementRef={index === posts.length - 1 ? lastPostElementRef : null}
             />
+              </Link>
+
+
         ))}
         {loading && <p>Loading...</p>}
-        </div>
-    </>
+    </div>
 
   );
 };

@@ -3,6 +3,7 @@ import './MakePostModal.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileArrowUp, faX } from '@fortawesome/free-solid-svg-icons';
 import { usePosts } from '../context/PostsContext';
+import { useParams } from 'react-router-dom';
 
 interface MakePostModalProps {
   onClose: () => void;
@@ -13,10 +14,17 @@ const MakePostModal: React.FC<MakePostModalProps> = ({ onClose }) => {
   const [content, setContent] = useState('');
   const [postImage, setPostImage] = useState<File | undefined>();
   const { submitPost } = usePosts();
+  const { id } = useParams<{ id: string }>();
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    submitPost({ title, content, postImage });
+    console.log({ title, content, postImage, id });
+    if(id) {
+      const response = await submitPost({ title, content, postImage, communityId: id});
+      if(response.ok) {
+        onClose();
+      }
+    } 
   };
 
   const handlePostImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {

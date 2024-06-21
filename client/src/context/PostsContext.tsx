@@ -8,7 +8,6 @@ import React, {
 } from "react";
 import IPost from "../types/Post";
 import { useAuth } from "./AuthContext";
-import { useParams } from "react-router-dom";
 
 interface PostsContextType {
   posts: IPost[];
@@ -16,6 +15,7 @@ interface PostsContextType {
   limit: number;
   total: number;
   loading: boolean;
+  order: string;
   addPost: (newPost: IPost) => void;
   setPosts: React.Dispatch<React.SetStateAction<IPost[]>>;
   handleLike: (postId: string, event: any) => void;
@@ -36,9 +36,12 @@ interface PostsContextType {
     title: string;
     content: string;
     postImage: File | undefined;
+    communityId: string;
   }) => Promise<any>;
-likePost: (postId: string) => Promise<any>;
-unlikePost: (postId: string) => Promise<any>;
+  likePost: (postId: string) => Promise<any>;
+  unlikePost: (postId: string) => Promise<any>;
+  setOrder: React.Dispatch<React.SetStateAction<string>>;
+  addComment: (postId: string, commentId: any) => void;
 }
 
 const PostsContext = createContext<PostsContextType | undefined>(undefined);
@@ -51,9 +54,9 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(1);
   const [total, setTotal] = useState(0);
+  const [order, setOrder] = useState("new");
   const observer = useRef<IntersectionObserver | null>(null);
   const { user } = useAuth();
-  const { id } = useParams<{ id: string }>();
 
   // function that converts date to ago format
   const timeSince = (date: Date) => {
@@ -83,6 +86,17 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
     }
     return Math.floor(seconds) + " seconds ago";
   };
+
+  const addComment = (postId: string, commentId: any) => {
+    setPosts(
+      posts.map((post) => {
+        if (post._id === postId) {
+          post.comments.push(commentId);
+        }
+        return post;
+      })
+    );
+  }
 
   const likePost = async (postId: string) => {
     // Like post and return smth
@@ -122,7 +136,9 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
     order: string
   ) => {
     const response = await fetch(
-      `https://localhost:4000/api/posts?communityIds=${communities.join(",")}&page=${page}&limit=${limit}&order=${order}`,
+      `https://localhost:4000/api/posts?communityIds=${communities.join(
+        ","
+      )}&page=${page}&limit=${limit}&order=${order}`,
       {
         method: "GET",
         headers: {
@@ -143,13 +159,14 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
     title: string;
     content: string;
     postImage: File | undefined;
+    communityId: string;
   }) => {
     // Submit post to API
     const payload = new FormData();
     payload.append("title", post.title);
     payload.append("content", post.content);
 
-    if (id) payload.append("community", id);
+    payload.append("community", post.communityId);
 
     if (user) {
       payload.append("userId", user.id);
@@ -160,6 +177,7 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
     if (post.postImage) {
       payload.append("photo", post.postImage);
     }
+    console.log(payload);
 
     const response = await fetch("https://localhost:4000/api/posts/create", {
       method: "POST",
@@ -235,6 +253,7 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
         limit,
         total,
         loading,
+        order,
         addPost,
         setPosts,
         handleLike,
@@ -249,6 +268,8 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
         submitPost,
         likePost,
         unlikePost,
+        setOrder,
+        addComment
       }}
     >
       {children}
