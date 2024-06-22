@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import Modal from '../components/Modal';
 import Followers from '../components/Followers';
 import Following from '../components/Following';
+import Chat from '../components/Chat';
 
 
 const Profile: React.FC = () => {
@@ -18,6 +19,7 @@ const Profile: React.FC = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isFollowersModalOpen, setFollowersModalOpen] = useState(false);
   const [isFollowingModalOpen, setFollowingModalOpen] = useState(false);
+  const [isChatOpen, setChatOpen] = useState(false);
   const [favoriteGames, setFavoriteGames] = useState<Game[]>([]);
 
   useEffect(() => {
@@ -126,6 +128,9 @@ const Profile: React.FC = () => {
       <Modal isOpen={isFollowingModalOpen} onClose={() => setFollowingModalOpen(false)}>
         <Following followUser={followUser} unfollowUser={unfollowUser} onClose={() => setFollowingModalOpen(false)}/>
       </Modal>
+      <Modal isOpen={isChatOpen} onClose={() => setChatOpen(false)}>
+        <Chat receiver={userData} />
+      </Modal>
       <img className="banner" src={userData.banner? "https://localhost:4000/" + userData.banner : defaultPicURL}/>
       <div className="profileHeader">
         <img className="profilePicture" src={userData.profilePicture? "https://localhost:4000/" + userData.profilePicture : defaultPicURL}/>
@@ -136,6 +141,7 @@ const Profile: React.FC = () => {
             {user && userData.followers.includes(user.id)?
               <button onClick={() => unfollowUser(id)}> Unfollow </button>
               : id !== user?.id && <button onClick={() => followUser(id)}> Follow </button>}
+            {id !== user?.id && <button onClick={() => setChatOpen(true)}> Message </button>}
           </div>
           <div className="userCounts">
             <p onClick={() => setFollowersModalOpen(true)}> {userData.followers.length} followers </p>

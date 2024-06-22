@@ -48,7 +48,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var dotenv = require("dotenv");
 var mongoose_1 = require("mongoose");
 var axios_1 = require("axios");
-var Game_1 = require("./src/models/Game"); // Adjust this path as needed to match your Game model file location
+var Game_1 = require("./src/models/Game"); 
 dotenv.config();
 var fetchGames = function () {
     var args_1 = [];
