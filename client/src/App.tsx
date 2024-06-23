@@ -38,40 +38,39 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <header className="App-header">
+        {user && (
+          <>
             <div>
               <Link to="/">Home</Link>
             </div>
-            {user && (
-              <>
-                <div>
-                  <Link to={"/profile/" + user.id}>Profile</Link>
-                </div>
-                <div>
-                  <Link to="/games">Games</Link>
-                </div>
-                <div>
-                  <Link to="/communities"> Communities </Link>
-                </div>
-                <div className="inboxIcon">
-                  <FontAwesomeIcon icon={faEnvelope} />
-                </div>
-               
-              </>
-            )}
+            <div>
+              <Link to={"/profile/" + user.id}>Profile</Link>
+            </div>
+            <div>
+              <Link to="/games">Games</Link>
+            </div>
+            <div>
+              <Link to="/communities"> Communities </Link>
+            </div>
+            <div className="inboxIcon">
+              <FontAwesomeIcon icon={faEnvelope} />
+            </div>
+          </>
+        )}
 
-            {!isLoggedIn && (
-              <>
-                <div>
-                  <Link to="/signup">Sign Up</Link>
-                </div>
-                <div>
-                  <Link to="/login">Login</Link>
-                </div>
-              </>
-            )}
-            <button className="logoutButton" onClick={handleLogout}>
-              Logout
-            </button>
+        {!isLoggedIn && (
+          <>
+            <div>
+              <Link to="/signup">Sign Up</Link>
+            </div>
+            <div className="loginLink">
+              <Link to="/login">Login</Link>
+            </div>
+          </>
+        )}
+        <button className="logoutButton" onClick={handleLogout}>
+          Logout
+        </button>
       </header>
       <main>
         <Routes>

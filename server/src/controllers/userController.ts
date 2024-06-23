@@ -13,7 +13,7 @@ export const signUp = async (req: Request, res: Response): Promise<void> => {
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      res.status(409).send('User already exists with the given email'); // 409 Conflict
+      res.status(409).send({message : 'User already exists with the given email'}); // 409 Conflict
       return;
     }
 
@@ -26,9 +26,9 @@ export const signUp = async (req: Request, res: Response): Promise<void> => {
       bio : ""
     });
     await newUser.save();
-    res.status(201).send('Sign up successful');
+    res.status(201).send({message : 'Sign up successful', userId : newUser._id});
   } catch (err: any) {
-    res.status(500).send('Error signing up: ' + err.message);
+    res.status(500).send({message: 'Error signing up: ' + err.message});
   }
 };
 
@@ -38,13 +38,13 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      res.status(404).send('User not found'); // Use 404 if no user found
+      res.status(404).send({message: 'User not found'}); // Use 404 if no user found
       return;
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      res.status(401).send('Invalid credentials'); // Use a more general message
+      res.status(401).send({message : 'Invalid credentials'}); // Use a more general message
       return;
     }
 
@@ -121,7 +121,7 @@ export const addGameToFavorites = async (req: Request, res: Response): Promise<v
       res.status(404).send('User not found');
       return;
     }
-    user.favoriteGames.push(new mongoose.Types.ObjectId(gameId));
+    user.favoriteGames.push(gameId);
     await user.save();
     res.status(200).send('Game added to favorites');
   }
@@ -199,7 +199,7 @@ export const getFollowing = async (req: Request, res: Response): Promise<void> =
 // gets the users who follow and are followed by the user
 export const getContacts = async (req: Request, res: Response): Promise<void> => {
   const userId = (req as any).user.id;
-  console.log("getting contacts")
+
   try {
     // populate the followers and follows fields of the user
     const user = await User.findOne({ _id : userId }).populate('followers').populate('follows');

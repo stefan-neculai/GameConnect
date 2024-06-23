@@ -126,3 +126,8 @@ a {
 .App-header a {
   color: white;
 }
+
+.loginLink {
+  margin-left: 0;
+  margin-right: auto;
+}

@@ -48,7 +48,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var dotenv = require("dotenv");
 var mongoose_1 = require("mongoose");
 var axios_1 = require("axios");
-var Game_1 = require("./src/models/Game"); 
+var Game_1 = require("./src/models/Game"); // Adjust this path as needed to match your Game model file location
 dotenv.config();
 var fetchGames = function () {
     var args_1 = [];
@@ -97,7 +97,7 @@ var fetchGames = function () {
                         }))];
                 case 2:
                     _a.sent();
-                    console.log("Successfully inserted ".concat(response.data.length, " games. Continuing with next batch..."));
+                    //console.log(`Successfully inserted ${response.data.length} games. Continuing with next batch...`);
                     fetchGames(offset + 500); // Recursive call to fetch next page
                     return [3 /*break*/, 4];
                 case 3:

@@ -48,13 +48,11 @@ export const getPosts = async (req: Request, res: Response) => {
       posts,
     });
   } catch (err: any) {
-    console.error('Error:', err.message);
     res.status(500).json({ message: err.message });
   }
 };
 
 export const createPost = async (req: Request, res: Response) => {
-  console.log(req.body);
   const newPost = new Post({
     title: req.body.title,
     content: req.body.content,
@@ -76,7 +74,6 @@ export const createPost = async (req: Request, res: Response) => {
     const savedPost = await newPost.save();
     res.status(201).json(savedPost);
   } catch (err: any) {
-    console.error('Error:', err.message);
     res.status(400).json({ message: err.message });
   }
 };
@@ -129,9 +126,10 @@ export const likePost = async (req: Request, res: Response) => {
 
 export const unlikePost = async (req: Request, res: Response) => {
   try {
+    const posts = await Post.find();
     const post = await Post.findById(req.params.id);
     const user = (req as any).user;
-    console.log(user);
+
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }

@@ -37,7 +37,7 @@ const fetchGames = async (offset = 0): Promise<void> => {
         }))
       })));
 
-      console.log(`Successfully inserted ${response.data.length} games. Continuing with next batch...`);
+      //console.log(`Successfully inserted ${response.data.length} games. Continuing with next batch...`);
       fetchGames(offset + 500);  // Recursive call to fetch next page
     } else {
       console.log('No more games to fetch.');

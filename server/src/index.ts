@@ -62,3 +62,5 @@ socketHandler(io);
 server.listen(port, () => {
   console.log(`Server is running on https://localhost:${port}`);
 });
+
+export { app, server };

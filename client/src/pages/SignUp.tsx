@@ -82,6 +82,10 @@ const SignupForm: React.FC = () => {
                 {errors.password && <p className="error-message">{errors.password}</p>}
             </div>
             <div>
+                <label>Confirm Password:</label>
+                <input type="password" />
+            </div>
+            <div>
                 <label>Username:</label>
                 <input type="text" name="username" value={formData.username} onChange={handleInputChange} />
                 {errors.username && <p className="error-message">{errors.username}</p>}
