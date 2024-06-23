@@ -6,6 +6,7 @@ export const getMessages = async (req: Request, res: Response) => {
   const {receiver, sender } = req.query;
   try {
     // get messages between the receiver and sender
+    console.log(receiver, sender)
     const messages = await Message.find({receiver: { $in: [receiver, sender] }, sender: { $in: [receiver, sender] }});
     res.json(messages);
   } catch (err: any) {

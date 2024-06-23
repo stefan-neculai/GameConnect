@@ -196,8 +196,23 @@ export const getFollowing = async (req: Request, res: Response): Promise<void> =
   }
 }
 
+// gets the users who follow and are followed by the user
+export const getContacts = async (req: Request, res: Response): Promise<void> => {
+  const userId = (req as any).user.id;
+  console.log("getting contacts")
+  try {
+    // populate the followers and follows fields of the user
+    const user = await User.findOne({ _id : userId }).populate('followers').populate('follows');
+    if (!user) {
+      res.status(404).send('User not found');
+      return;
+    }
+    // make a contacts array containing the users who are in both followers and follows
+    const contacts = user.followers.filter((follower: any) => user.follows.filter((follow : any) => follow.equals(follower)).length > 0);
 
-
-
-
-
+    res.status(200).json(contacts);
+  }
+  catch (err: any) {
+    res.status(500).send('Error getting contacts: ' + err.message);
+  }
+};
