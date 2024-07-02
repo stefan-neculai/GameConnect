@@ -21,6 +21,7 @@ const Profile: React.FC = () => {
   const [isFollowingModalOpen, setFollowingModalOpen] = useState(false);
   const [isChatOpen, setChatOpen] = useState(false);
   const [favoriteGames, setFavoriteGames] = useState<Game[]>([]);
+  const [posts, setPosts] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +52,22 @@ const Profile: React.FC = () => {
       }
     }
 
+    const fetchPosts = async () => {
+      const response = await fetch(`https://localhost:4000/api/posts/author/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include', // Ensure cookies are sent with the request
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setPosts(data);
+      }
+    }
+
     fetchData();
+    fetchPosts();
     fetchFavoriteGames();
 
   }, [id]);
@@ -90,7 +106,8 @@ const Profile: React.FC = () => {
         credentials: 'include', // Ensure cookies are sent with the request
       });
 
-      if(response.ok) { 
+      if(response.ok && userData) { 
+        setUserData({...userData, followers: [...userData?.followers, user.id]});
         console.log('User followed successfully');
       }
     }
@@ -106,7 +123,8 @@ const Profile: React.FC = () => {
         credentials: 'include', // Ensure cookies are sent with the request
       });
 
-      if(response.ok) { 
+      if(response.ok && userData) { 
+        setUserData({...userData, followers: userData?.followers.filter(follower => follower !== user.id)});
         console.log('User unfollowed successfully');
       }
     }
@@ -146,7 +164,7 @@ const Profile: React.FC = () => {
           <div className="userCounts">
             <p onClick={() => setFollowersModalOpen(true)}> {userData.followers.length} followers </p>
             <p onClick={() => setFollowingModalOpen(true)}> {userData.follows.length} following </p>
-            <p> 20 posts </p>
+            <p> {posts.length} posts </p>
           </div>
           <p>{userData.bio}</p>
         </div>

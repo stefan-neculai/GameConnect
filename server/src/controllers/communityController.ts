@@ -6,15 +6,20 @@ import { Types } from 'mongoose';
 
 export const getCommunities = async (req: Request, res: Response): Promise<void> => {
     const page: number = parseInt(req.query.page as string) || 1;
-    const limit: number = parseInt(req.query.limit as string) || 10;
+    const limit: number = parseInt(req.query.limit as string) || 1000;
     const skip: number = (page - 1) * limit;
     const search: string = (req.query.search as string) || '';
+    const communityIds: string = (req.query.communityIds as string) || '';
 
     try {
         const searchQuery: any = {};
 
         if (search) {
             searchQuery.name = { $regex: search, $options: 'i' };
+        }
+
+        if (communityIds) {
+            searchQuery._id = { $in: communityIds.split(',') };
         }
 
         const totalCommunities = await Community.countDocuments(searchQuery);

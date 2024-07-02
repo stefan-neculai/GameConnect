@@ -1,49 +1,31 @@
 html {
-  overflow-y: overlay;
+  overflow: auto;
+  min-height: 100vh;
 }
+
+body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+.App {
+  display: flex;
+  height: 100%;
+}
+
 .App-header {
   background-color: #282c34;
-  height: 10vh;
-  width: 100%;
+  position: sticky;
+  top: 0;
+  padding: 5px 15px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  justify-content: start;
   color: white;
-}
-
-.App-header nav {
-  width: 100%;
-}
-
-.App-header nav ul {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  list-style-type: none;
-}
-
-.App-header nav ul li {
-  margin: 10px;
-}
-
-.App-header nav ul li * {
-  text-decoration: none;
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  height: 100vh;
 }
 
 main {
@@ -51,6 +33,8 @@ main {
   justify-content: center;
   align-items: center;
   width: 100%;
+  height: 100%;
+  overflow-y: hidden;
 }
 
 /* Adding some styles for form elements for better aesthetics */
@@ -101,33 +85,62 @@ a {
   color: black;
 }
 
-.inboxIcon {
-  margin-right: 0px;
-  margin-left: auto;
+.notificationCount {
+  background-color: red;
+  color: white;
+  border-radius: 24%;
+  height: 20px;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  padding: 0px 5px;
+  position: relative;
+  top: -5px;
+  right: 5px;
 }
 
-.App-header {
+.App-header img {
+  height: 30px;
+  width: 30px;
+  border-radius: 100%;
+}
+
+.App-header > div > a {
+  height: 100%;
   display: flex;
+  flex-direction: row;
+  align-items: center;
   gap: 10px;
-  padding: 0px 50px;
-  box-sizing: border-box;
 }
 
 .App-header > div {
-  height: 100%;
   display: flex;
   align-items: center;
-}
-.App-header > div:hover {
-  background-color: #1D2026;
-
+  gap: 10px;
 }
 
-.App-header a {
-  color: white;
+.App-header a, .App-header div {
+  color: rgba(255, 255, 255, 0.832);
 }
 
 .loginLink {
   margin-left: 0;
   margin-right: auto;
+}
+
+.App-header a:hover, .App-header div:hover {
+  color: white;
+}
+
+.App-header > .profileLink > a {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+}
+
+.App-header > .profileLink p {
+  margin: 0;
 }

@@ -140,3 +140,13 @@ export const unlikePost = async (req: Request, res: Response) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const getPostsByAuthor = async (req: Request, res: Response) => {
+  try {
+    const posts = await Post.find({ "author.userId": req.params.id });
+    res.json(posts);
+  } catch (err: any) {
+    res.status(500).json({ message: err.message });
+  }
+}
+

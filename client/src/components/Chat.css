@@ -28,6 +28,27 @@
     aspect-ratio: 1/1;
     object-fit: cover;
     border-radius: 100%;
+    position: relative;
+}
+
+.statusIndicator {
+    height: 10px;
+    width: 10px;
+    border-radius: 100%;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+.statusIndicator.online {
+    background-color: green;
+}
+.statusIndicator.offline {
+    background-color: red;
+}
+
+.chatAvatarWrapper {
+    position: relative;
 }
 
 .chat-wrapper {

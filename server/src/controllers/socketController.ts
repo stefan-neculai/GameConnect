@@ -2,6 +2,8 @@ import { Server } from 'socket.io';
 import jwt from 'jsonwebtoken';
 import Message from '../models/Message'; // Import your Message model
 
+const onlineUsers = new Map(); // To keep track of online users
+
 const socketHandler = (io: Server) => {
   io.use((socket, next) => {
     const token = socket.handshake.headers.cookie?.split('=')[1];
@@ -18,8 +20,15 @@ const socketHandler = (io: Server) => {
   });
 
   io.on('connection', (socket) => {
-    console.log('New client connected');
-    socket.join(`room_${(socket as any).user.id}`); // Join the room with the user ID
+    const user = (socket as any).user;
+    const userId = (socket as any).user.id;
+    console.log(`New client connected ${user.username}`);
+    socket.join(`room_${userId}`); // Join the room with the user ID
+    onlineUsers.set(userId, socket.id); // Add user to the online users map
+    console.log(onlineUsers);
+
+    io.emit('userOnline', { onlineUsers: Array.from(onlineUsers.keys())});
+    
     socket.on('message', async (data) => {
       console.log(data);
 
@@ -39,8 +48,21 @@ const socketHandler = (io: Server) => {
       }
     });
 
+    socket.on('typing', (data) => {
+      console.log(data);
+      io.to(data.receiver).emit('typing', data);
+    });
+
+    socket.on('stopTyping', (data) => {
+      console.log(data);
+      io.to(data.receiver).emit('stopTyping', data);
+    });
+
     socket.on('disconnect', () => {
       console.log('Client disconnected');
+      onlineUsers.delete(userId);
+      console.log(onlineUsers);
+      io.emit('userOffline', { userId });
     });
   });
 };

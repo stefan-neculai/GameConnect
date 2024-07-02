@@ -2,7 +2,7 @@ import express from 'express';
 import authenticateToken from '../middleware/auth';
 import { get } from 'mongoose';
 import  upload from '../middleware/multer';
-import { getPosts, createPost, updatePost, deletePost, getPost, likePost, unlikePost } from '../controllers/postController';
+import { getPosts, createPost, updatePost, deletePost, getPost, likePost, unlikePost, getPostsByAuthor } from '../controllers/postController';
 
 const router = express.Router();
 
@@ -13,5 +13,5 @@ router.put('/posts/:id/update', authenticateToken, updatePost);
 router.delete('/posts/:id/delete', authenticateToken, deletePost);
 router.put('/posts/:id/like', authenticateToken, likePost);
 router.put('/posts/:id/unlike', authenticateToken, unlikePost);
-
+router.get('/posts/author/:id', authenticateToken, getPostsByAuthor);
 export default router;

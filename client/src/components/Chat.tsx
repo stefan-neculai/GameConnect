@@ -6,6 +6,7 @@ import { io, Socket } from "socket.io-client";
 import "./Chat.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { useSocket } from "../context/SocketContext";
 
 interface ChatProps {
   receiver: User;
@@ -14,13 +15,13 @@ interface ChatProps {
 const ENDPOINT = "https://localhost:4000";
 
 const Chat: React.FC<ChatProps> = ({ receiver }) => {
-  const [messages, setMessages] = useState<IMessage[]>([]);
   const [activeUser, setActiveUser] = useState<User | null>(null); // Add this line
   const [input, setInput] = useState<string>("");
   const [contacts, setContacts] = useState<User[]>([]); // Add this line
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [isTyping, setIsTyping] = useState<boolean>(false);
   const { user } = useAuth();
-  const socketRef = useRef<Socket | null>(null);
+  const { messages, onlineUsers, typingUsers, socket, setOnlineUsers, setMessages,  } = useSocket();
+
   const getUserData = (id: string) => {
     if (id == user?.id) return user;
     return receiver;
@@ -45,22 +46,6 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
     }
 
     fetchContacts();
-
-    const socket = io(ENDPOINT, {
-      withCredentials: true,
-    });
-    socketRef.current = socket;
-
-    // Listen for messages from the server
-    socket.on("message", (newMessage: IMessage) => {
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-    });
-
-
-    // Clean up the connection on component unmount
-    return () => {
-      socket.disconnect();
-    };
   }
   , []);
 
@@ -92,7 +77,7 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
   };
 
   const handleSendMessage = async () => {
-    if (socketRef.current && input.trim() !== "" && activeUser !== null && user !== null) {
+    if (socket && input.trim() !== "" && activeUser !== null && user !== null) {
       const messageData = {
         sender: user?.id,
         receiver: activeUser?._id,
@@ -100,8 +85,9 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
         createdAt: new Date(),
       };
 
-      socketRef.current.emit('message', messageData); // Emit message to the server
-
+      socket.emit('message', messageData); // Emit message to the server
+      socket?.emit('stopTyping', { sender: user?.id, receiver: activeUser?._id });
+      setIsTyping(false);
       setMessages((prevMessages) => [...prevMessages, messageData]);
       setInput("");
     }
@@ -110,12 +96,23 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
       handleSendMessage();
+
     }
   }
 
   const handleKeyPress = (e: any) => {
+    if(e.target.value.length > 0 && !isTyping) {
+      socket?.emit('typing', { sender: user?.id, receiver: activeUser?._id });
+      setIsTyping(true);
+    }
+    else if(e.target.value.length === 0 && isTyping) {
+      socket?.emit('stopTyping', { sender: user?.id, receiver: activeUser?._id });
+      setIsTyping(false);
+    }
     setInput(e.target.value);
   };
+
+  if(activeUser === null) return null;
 
   return (
     <div className="chat-container">
@@ -123,7 +120,11 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
         <h2>Contacts</h2>
         {contacts.map((contact, index) => (
           <div key={index} className="chat-contact" onClick={() => setActiveUser(contact)}>
-            <img src={`https://localhost:4000/${contact.profilePicture}`} alt="profile" />
+            <div className="chatAvatarWrapper">
+              <img src={`https://localhost:4000/${contact.profilePicture}`} alt="profile" />
+              <div className={`statusIndicator ${onlineUsers.includes(contact?._id) ? 'online': 'offline'}`}/>
+            </div>
+
             <p>{contact.username}</p>
           </div>
         ))}
@@ -138,7 +139,7 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
               <strong>{getUserData(msg.sender).username}:</strong> {msg.content}
             </div>
           ))}
-          <div ref={messagesEndRef} />
+          <div />
         </div>
         <div className="chat-input">
           <input
@@ -150,6 +151,7 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
           />
           <button onClick={handleSendMessage}> <FontAwesomeIcon icon={faArrowRight}/> </button>
         </div>
+        {typingUsers.includes(activeUser._id) && <p> {activeUser.username} is typing... </p>}
       </div>
       
     </div>

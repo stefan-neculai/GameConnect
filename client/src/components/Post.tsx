@@ -7,14 +7,16 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import IPost from '../types/Post';
 import { useAuth } from '../context/AuthContext';
 import { usePosts } from '../context/PostsContext';
+import ICommunity from '../types/Community';
 
 
 interface PostProps {
   post: IPost;
   elementRef?: any;
+  community?: ICommunity;
 }
 
-const Post: React.FC<PostProps> = ({ post, elementRef }) => {
+const Post: React.FC<PostProps> = ({ post, elementRef, community }) => {
   const { user } = useAuth();
   const { timeSince } = usePosts();
   const { handleLike, handleUnlike } = usePosts();
@@ -56,6 +58,7 @@ const Post: React.FC<PostProps> = ({ post, elementRef }) => {
             <img src={`https://localhost:4000/${post.author.profilePic}`} alt={post.author.username} />
             <p>{post.author.username}</p>
             <p> {timeSince(post.createdAt)}</p>
+            {community && <Link to={`/community/${community._id}`}> {community.name} </Link>}
           </div>
           <h2>{post.title}</h2>
           {/* Display the post image if it exists */}

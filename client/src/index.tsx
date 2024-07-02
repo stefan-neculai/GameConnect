@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './context/AuthContext';
 import { PostsProvider } from './context/PostsContext';
+import { SocketProvider } from './context/SocketContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -14,7 +15,9 @@ root.render(
   <BrowserRouter>
     <AuthProvider>
       <PostsProvider>
-        <App />
+        <SocketProvider>
+          <App />
+        </SocketProvider>
       </PostsProvider>
     </AuthProvider>
   </BrowserRouter>

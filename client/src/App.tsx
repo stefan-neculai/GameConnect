@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -8,21 +8,26 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
-import ProtectedRoute from "./components/ProtectedRoute";
 import { useAuth } from "./context/AuthContext";
 import Games from "./pages/Games";
-import Game from "./pages/Game";
 import GameDetails from "./pages/Game";
 import Communities from "./pages/Communities";
 import Community from "./pages/Community";
-import Post from "./components/Post";
 import PostPage from "./pages/PostPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInbox, faMailBulk } from "@fortawesome/free-solid-svg-icons";
-import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
+import {
+  faArrowRightFromBracket,
+  faGamepad,
+  faHome,
+  faPeopleGroup,
+  faComment,
+  faBell,
+} from "@fortawesome/free-solid-svg-icons";
+import { useSocket } from "./context/SocketContext";
 
 const App: React.FC = () => {
   const { isLoggedIn, setIsLoggedIn, handleLogin, user } = useAuth();
+  const { notifications } = useSocket();
   const navigate = useNavigate();
 
   useEffect(handleLogin, []);
@@ -38,22 +43,61 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <header className="App-header">
-        {user && (
+        {isLoggedIn && user && (
           <>
-            <div>
-              <Link to="/">Home</Link>
+            <div className="profileLink">
+              <Link to={"/profile/" + user.id}>
+                <img
+                  src={`https://localhost:4000/${user.profilePicture}`}
+                  alt="avatar"
+                />
+                <p> {user.username} </p>
+              </Link>
             </div>
             <div>
-              <Link to={"/profile/" + user.id}>Profile</Link>
+              <Link to="/">
+                <FontAwesomeIcon icon={faHome} />
+                <p> Home </p>
+              </Link>
             </div>
             <div>
-              <Link to="/games">Games</Link>
+              <Link to="/games">
+                <FontAwesomeIcon icon={faGamepad} />
+                <p> Games </p>
+              </Link>
             </div>
             <div>
-              <Link to="/communities"> Communities </Link>
+              <Link to="/communities">
+                {" "}
+                <FontAwesomeIcon icon={faPeopleGroup} />
+                <p> Communities </p>{" "}
+              </Link>
             </div>
+
+            <div>
+              <Link to="/communities">
+                {" "}
+                <FontAwesomeIcon icon={faComment} />
+                <p> Chats </p>{" "}
+              </Link>
+            </div>
+
             <div className="inboxIcon">
-              <FontAwesomeIcon icon={faEnvelope} />
+              <FontAwesomeIcon icon={faBell} />
+              <p> Notifications </p>
+              {notifications.length != 0 && (
+                <div className="notificationCount">
+                  {" "}
+                  {notifications.length ? notifications.length : ""}
+                </div>
+              )}
+            </div>
+
+            <div onClick={handleLogout}>
+              <FontAwesomeIcon
+                icon={faArrowRightFromBracket}
+              />
+              <p> Exit </p>
             </div>
           </>
         )}
@@ -68,9 +112,6 @@ const App: React.FC = () => {
             </div>
           </>
         )}
-        <button className="logoutButton" onClick={handleLogout}>
-          Logout
-        </button>
       </header>
       <main>
         <Routes>
@@ -84,7 +125,7 @@ const App: React.FC = () => {
           <Route path="/post/:id" element={<PostPage />} />
           <Route path="/game/:id" element={<GameDetails />} />
           <Route path="/login" element={<Login />} />
-          {user && <Route path="/profile/:id" element={<Profile />} />}
+          <Route path="/profile/:id" element={<Profile />} />
         </Routes>
       </main>
     </div>

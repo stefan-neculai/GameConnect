@@ -160,6 +160,35 @@ export const followUser = async (req: Request, res: Response): Promise<void> => 
   }
 }
 
+export const unfollowUser = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+  const requestingId = (req as any).user.id;
+  try {
+    const user = await User.findOne({ _id : id });
+    if (!user) {
+      res.status(404).send('User not found');
+      return;
+    }
+    // remove the requesting user from the follows list of the user to be unfollowed
+    user.followers = user.followers.filter((follower : any) => !follower.equals(requestingId));
+    await user.save();
+
+    // remove the user to be unfollowed from the follows list of the requesting user
+    const requesting = await User.findOne({ _id : requestingId });
+    if (!requesting) {
+      res.status(404).send('Requesting user not found');
+      return;
+    }
+    requesting.follows = requesting.follows.filter((follow : any) => !follow.equals(id));
+    await requesting.save();
+
+    res.status(200).send('User unfollowed successfully');
+  }
+  catch (err: any) {
+    res.status(500).send('Error unfollowing user: ' + err.message);
+  }
+}
+
 export const getFollowers = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   try {

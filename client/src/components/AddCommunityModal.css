@@ -61,9 +61,6 @@
     cursor: pointer;
   }
   
-  .modalControls button:hover {
-    background-color: #f0f0f0;
-  }
   
   .searchResults {
     max-height: 300px;
