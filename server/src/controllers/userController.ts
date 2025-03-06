@@ -22,7 +22,7 @@ export const signUp = async (req: Request, res: Response): Promise<void> => {
       username,
       email,
       password: hashedPassword,
-      profilePicture : "",
+      profilePicture : "images/default.jpg",
       bio : ""
     });
     await newUser.save();
@@ -127,6 +127,25 @@ export const addGameToFavorites = async (req: Request, res: Response): Promise<v
   }
   catch (err: any) {
     res.status(500).send('Error adding game to favorites: ' + err.message);
+  }
+}
+
+export const removeGameFromFavorites = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+  const { gameId } = req.body;
+  try {
+    const user = await User.findOne({ _id : id });
+    if (!user) {
+      res.status(404).send('User not found');
+      return;
+    }
+    user.favoriteGames = user.favoriteGames.filter((game : any) => !game.equals(gameId));
+    await user.save();
+    res.status(200).send('Game removed from favorites');
+  }
+
+  catch (err: any) {
+    res.status(500).send('Error removing game from favorites: ' + err.message);
   }
 }
 

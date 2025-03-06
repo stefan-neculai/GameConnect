@@ -1,0 +1,9 @@
+.breadcrumbNav {
+    display: flex;
+    width: 900px;
+    justify-content: start;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+

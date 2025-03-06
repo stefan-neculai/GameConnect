@@ -14,10 +14,10 @@ const Community: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useParams();
   const { setPage, setPosts, setTotal, setOrder } = usePosts();
-  
+  const API_URL = process.env.REACT_APP_API_URL;
   useEffect(() => {
     const fetchCommunity = async () => {
-      const response = await fetch(`https://localhost:4000/api/community/${id}`,
+      const response = await fetch(`${API_URL}/community/${id}`,
         {
           method: 'GET',
           headers: {
@@ -51,8 +51,11 @@ const Community: React.FC = () => {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <MakePostModal onClose={onSuccesfulPost} />
       </Modal>
-      <h1>{community.name}</h1>
+      <div className='communityHeader'>
+      <h1>{community.name} </h1>
       <button onClick={() => setIsModalOpen(true)}> Add Post </button>
+      </div>
+ 
       <Posts communityIds={[id? id : '']}/>
     </div>
   );

@@ -11,6 +11,7 @@ export const getPosts = async (req: Request, res: Response) => {
   const communityIds: string[] = (req.query.communityIds as string).split(",");
   const order = req.query.order as string;
 
+  console.log(communityIds)
   const validIds = communityIds.filter((id) => id !== '').map((id) => new mongoose.Types.ObjectId(id));
   try {
     const searchQuery: any = {};

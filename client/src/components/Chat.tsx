@@ -9,7 +9,7 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { useSocket } from "../context/SocketContext";
 
 interface ChatProps {
-  receiver: User;
+  receiver?: User;
 }
 
 const ENDPOINT = "https://localhost:4000";
@@ -20,11 +20,11 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
   const [contacts, setContacts] = useState<User[]>([]); // Add this line
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const { user } = useAuth();
-  const { messages, onlineUsers, typingUsers, socket, setOnlineUsers, setMessages,  } = useSocket();
+  const { messages, onlineUsers, typingUsers, socket, setOnlineUsers, setMessages, markMessagesAsSeen  } = useSocket();
 
   const getUserData = (id: string) => {
-    if (id == user?.id) return user;
-    return receiver;
+    if (id == user?._id) return user;
+    return activeUser;
   };
 
   useEffect(() => {
@@ -40,8 +40,10 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
       if (response.ok) {
         const data = await response.json();
         console.log("contacts: ", data)
-        setActiveUser(data.find((contact : any) => contact._id == receiver._id) || null);
+        setActiveUser(data.find((contact : any) => contact._id == receiver?._id) || null);
         setContacts(data);
+        if(!receiver)
+          setActiveUser(data[0]);
       }
     }
 
@@ -50,17 +52,20 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
   , []);
 
   useEffect(() => {
-    fetchMessages(receiver._id);
+    if(receiver)
+      fetchMessages(receiver._id);
   }, [receiver]);
 
   useEffect(() => {
-    if(activeUser !== null) 
+    if(activeUser !== null)  {
       fetchMessages(activeUser?._id);
-  }, [activeUser]);
+      markMessagesAsSeen(activeUser?._id);
+    }
+    }, [activeUser]);
 
   const fetchMessages = async (receiverId : string) => {
     const response = await fetch(
-      `https://localhost:4000/api/messages?sender=${user?.id}&receiver=${receiverId}`,
+      `https://localhost:4000/api/messages?sender=${user?._id}&receiver=${receiverId}`,
       {
         method: "GET",
         headers: {
@@ -79,14 +84,14 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
   const handleSendMessage = async () => {
     if (socket && input.trim() !== "" && activeUser !== null && user !== null) {
       const messageData = {
-        sender: user?.id,
+        sender: user?._id,
         receiver: activeUser?._id,
         content: input,
         createdAt: new Date(),
       };
 
       socket.emit('message', messageData); // Emit message to the server
-      socket?.emit('stopTyping', { sender: user?.id, receiver: activeUser?._id });
+      socket?.emit('stopTyping', { sender: user?._id, receiver: activeUser?._id });
       setIsTyping(false);
       setMessages((prevMessages) => [...prevMessages, messageData]);
       setInput("");
@@ -102,11 +107,13 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
 
   const handleKeyPress = (e: any) => {
     if(e.target.value.length > 0 && !isTyping) {
-      socket?.emit('typing', { sender: user?.id, receiver: activeUser?._id });
+      socket?.emit('typing', { sender: user?._id, receiver: activeUser?._id });
+      console.log("typing");
       setIsTyping(true);
     }
     else if(e.target.value.length === 0 && isTyping) {
-      socket?.emit('stopTyping', { sender: user?.id, receiver: activeUser?._id });
+      socket?.emit('stopTyping', { sender: user?._id, receiver: activeUser?._id });
+      console.log("stop typing");
       setIsTyping(false);
     }
     setInput(e.target.value);
@@ -117,7 +124,7 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
   return (
     <div className="chat-container">
       <div className="chat-contacts">
-        <h2>Contacts</h2>
+        <h2>Contacts ({contacts.length})</h2>
         {contacts.map((contact, index) => (
           <div key={index} className="chat-contact" onClick={() => setActiveUser(contact)}>
             <div className="chatAvatarWrapper">
@@ -136,7 +143,7 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
         <div className="chat-messages">
           {messages.map((msg, index) => (
             <div key={index} className="chat-message">
-              <strong>{getUserData(msg.sender).username}:</strong> {msg.content}
+              <strong>{getUserData(msg.sender)?.username}:</strong> {msg.content}
             </div>
           ))}
           <div />
@@ -151,7 +158,7 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
           />
           <button onClick={handleSendMessage}> <FontAwesomeIcon icon={faArrowRight}/> </button>
         </div>
-        {typingUsers.includes(activeUser._id) && <p> {activeUser.username} is typing... </p>}
+        {typingUsers.includes(activeUser._id) && <p className="isTyping"> {activeUser.username} is typing... </p>}
       </div>
       
     </div>

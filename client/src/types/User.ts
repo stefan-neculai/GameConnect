@@ -9,5 +9,6 @@ export interface User {
   follows: string[];
   followers: string[];
   communities: string[];
+  favoriteGames: string[];
   // Add other user-related fields as needed
 }

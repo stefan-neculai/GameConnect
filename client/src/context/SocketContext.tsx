@@ -2,7 +2,8 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { io, Socket } from 'socket.io-client';
 import IMessage from '../types/Message';
 import { useAuth } from './AuthContext';
-
+import  notificationSound  from '../assets/level-up-191997.mp3';
+import useSound from 'use-sound';
 interface SocketContextType {
   socket: Socket | null;
   messages: IMessage[];
@@ -29,8 +30,9 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const [notifications, setNotifications] = useState<string[]>([]);
   const [unseenMessages, setUnseenMessages] = useState<{ [userId: string]: IMessage[] }>({});
+  const [isChatOpen, setChatOpen] = useState(false);
   const { user } = useAuth();
-
+  const [playSound] = useSound(notificationSound);
   useEffect(() => {
     const socket = io(endpoint, {
       withCredentials: true,
@@ -40,8 +42,8 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     // Listen for messages from the server
     socket.on("message", (newMessage: IMessage) => {
       setMessages((prevMessages) => [...prevMessages, newMessage]);
-
-      // Update unseen messages
+      if(!isChatOpen)
+        playSound();
       setUnseenMessages((prevUnseen) => {
         const userId = newMessage.sender; 
         if (!prevUnseen[userId]) {

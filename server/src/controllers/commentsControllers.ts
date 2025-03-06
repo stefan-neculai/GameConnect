@@ -49,16 +49,17 @@ export const getComment = async (req: Request, res: Response): Promise<void> => 
 export const createComment = async (req: Request, res: Response): Promise<void> => {
     try {
         // Extract data from request body
-        const { content, post, author } = req.body;
+        const { content, post, commentParent, author } = req.body;
 
         // Validate the presence of required fields
-        if (!content || !post || !author || !author.userId || !author.username || !author.profilePic) {
+        console.log(content, post, commentParent, author);
+        if (!content || (!post && !commentParent) || !author || !author.userId || !author.username || !author.profilePic) {
             res.status(400).json({ message: 'All fields are required' });
             return;
         }
 
         // Validate ObjectId for post and author.userId
-        if (!mongoose.Types.ObjectId.isValid(post) || !mongoose.Types.ObjectId.isValid(author.userId)) {
+        if ((!mongoose.Types.ObjectId.isValid(post) && !mongoose.Types.ObjectId.isValid(commentParent)) || !mongoose.Types.ObjectId.isValid(author.userId)) {
             res.status(400).json({ message: 'Invalid post ID or author user ID' });
             return;
         }
@@ -67,6 +68,7 @@ export const createComment = async (req: Request, res: Response): Promise<void> 
         const newComment = new Comment({
             content,
             post: post,
+            commentParent: commentParent,
             author: {
                 userId: author.userId,
                 username: author.username,
@@ -79,14 +81,17 @@ export const createComment = async (req: Request, res: Response): Promise<void> 
         // Save new comment to database
         const savedComment : any = await newComment.save();
 
-        // Add the comment to the post
-        const postDoc = await Post.findById(post);
-        if (!postDoc) {
-            res.status(404).json({ message: 'Post not found' });
-            return;
+        if(post) {
+            // Add the comment to the post
+            const postDoc = await Post.findById(post);
+            if (!postDoc) {
+                res.status(404).json({ message: 'Post not found' });
+                return;
+            }
+            postDoc.comments.push(savedComment._id);
+            await postDoc.save();
         }
-        postDoc.comments.push(savedComment._id);
-        await postDoc.save();
+
 
         res.status(201).json(savedComment);
     } catch (err: any) {

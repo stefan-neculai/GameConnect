@@ -1,7 +1,7 @@
 .chat-container {
     display: flex;
     flex-direction: row;
-    height: 500px;
+    height: 70vh;
     width: 500px;
     gap: 10px;
 }
@@ -52,6 +52,7 @@
 }
 
 .chat-wrapper {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -67,9 +68,16 @@
     border: 1px solid #f0f0f0;
     border-radius: 5px;
 }
+
 .chat-input button {
     border-radius: 100%;
     padding: 10px;
     height: 100%;
     aspect-ratio: 1/1;
+}
+
+.isTyping {
+    position: absolute;
+    bottom: -20px;
+    font-size: 12px;
 }

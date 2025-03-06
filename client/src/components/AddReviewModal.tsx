@@ -32,8 +32,12 @@ const AddReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, onReviewS
             Review:
             <textarea value={content} onChange={(e) => setContent(e.target.value)} />
           </label>
-          <button type="submit">Submit Review</button>
-          <button type="button" onClick={onClose}>Close</button>
+          
+          <div className="buttons">
+           <button type="button" onClick={onClose}>Close</button>
+            <button type="submit">Submit Review</button>  
+          </div>
+
         </form>
       </div>
     </div>

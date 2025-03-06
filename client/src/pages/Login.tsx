@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Login.css';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Login: React.FC = () => {
@@ -10,7 +10,7 @@ const Login: React.FC = () => {
   const [errors, setErrors] = useState({ email: '', password: '' });
   const navigate = useNavigate();
   const { handleLogin } = useAuth();
-  
+  const API_URL = process.env.REACT_APP_API_URL;
   // Helper function to validate email
   const isValidEmail = (email: string) => {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -37,7 +37,7 @@ const Login: React.FC = () => {
       return;
     }
     setLoading(true);
-    const response = await fetch('https://localhost:4000/api/login', {
+    const response = await fetch(`${API_URL}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -89,7 +89,7 @@ const Login: React.FC = () => {
           />
           {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
         </div>
-        
+        <p>Don't have an account already? Click here to <Link to={'/signup'}>sign up.</Link></p>
         {loading ? <div className="loader"> </div> : <button type="submit" disabled={loading}> Log In </button>}
       
       </form>

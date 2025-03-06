@@ -18,6 +18,7 @@ const AddCommunityModal: React.FC<AddCommunityModalProps> = ({ onCommunitySubmit
   const [communityIcon, setCommunityIcon] = useState<File | undefined>();
   const [searchResults, setSearchResults] = useState<Game[]>([]);
   const { getImageUrlSmall, getReleaseYear } = GameUtils();
+  const API_URL = process.env.REACT_APP_API_URL;
   
   // everytime relatedGame changes
     useEffect(() => {
@@ -39,7 +40,7 @@ const AddCommunityModal: React.FC<AddCommunityModalProps> = ({ onCommunitySubmit
 
   const fetchSearchResults = async (search: string) => {
     if(search) {
-        const response = await fetch(`https://localhost:4000/api/games?search=${search}&limit=${15}`, {
+        const response = await fetch(`${API_URL}/games?search=${search}&limit=${15}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

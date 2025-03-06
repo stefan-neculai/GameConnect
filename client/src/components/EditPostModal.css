@@ -1,0 +1,77 @@
+/* EditPostModal.css */
+
+.editPostModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 90%;
+    max-width: 500px;
+  }
+  
+  .editPostModal h2 {
+    margin-bottom: 20px;
+  }
+  
+  .editPostForm {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .editPostForm label {
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .editPostForm input[type="text"],
+  .editPostForm textarea {
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .editPostForm textarea {
+    height: 100px;
+  }
+  
+  .editPostForm .postImageLabel {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .editPostForm .postImageLabel svg {
+    margin-right: 10px;
+  }
+  
+  .editPostForm input[type="file"] {
+    display: none;
+  }
+  
+  .modalControls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  .modalControls button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .modalControls button:hover {
+    opacity: 0.8;
+  }
+  
+ 

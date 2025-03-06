@@ -31,3 +31,9 @@
     justify-content: start;
     flex-grow: 1;
 }
+
+.pageHeader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

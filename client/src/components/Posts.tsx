@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Post from "../components/Post";
 import { usePosts } from "../context/PostsContext";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import ICommunity from "../types/Community";
+import { faWindows } from "@fortawesome/free-brands-svg-icons";
 
 // Define the Posts component interface for the props
 // it includes communityids
@@ -29,9 +30,19 @@ const Posts: React.FC<PostsProps> = ({ communityIds }) => {
     setOrder
   } = usePosts();
   const [communities, setCommunities] = useState<ICommunity[]>([]);
+  const API_URL = process.env.REACT_APP_API_URL;
+
+
+  useEffect(() => {
+    console.log("first render")
+    setPosts([]);
+    setTotal(0);
+    setPage(1);
+  }, []);
 
   useEffect(() => {
     // Fetch posts from API
+    console.log("page changed")
     const fetchPosts = async () => {
       setLoading(true);
       const postsData = await getPosts(page, limit, communityIds, order);
@@ -44,7 +55,7 @@ const Posts: React.FC<PostsProps> = ({ communityIds }) => {
     };
     
     const fetchCommunities = async () => {
-      const response = await fetch(`https://localhost:4000/api/community?communityIds=${communityIds}`, {
+      const response = await fetch(`${API_URL}/community?communityIds=${communityIds}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -58,11 +69,10 @@ const Posts: React.FC<PostsProps> = ({ communityIds }) => {
       }
     }
 
-    if(communityIds.length > 1)
-      fetchCommunities();
+    fetchCommunities();
     fetchPosts();
   }, [page]);
-
+  
   useEffect(() => {
     console.log("wtf")
     setPosts([]);
@@ -81,16 +91,12 @@ const Posts: React.FC<PostsProps> = ({ communityIds }) => {
             <option value="old">Old</option>
         </select>
         {posts.map((post, index) => (
-              <Link to={`/post/${post._id}`}>
             <Post
             key={post._id}
             post={post}
             elementRef={index === posts.length - 1 ? lastPostElementRef : null}
             community={communities.find((c) => c._id === post.community)}
             />
-              </Link>
-
-
         ))}
         {loading && <p>Loading...</p>}
     </div>

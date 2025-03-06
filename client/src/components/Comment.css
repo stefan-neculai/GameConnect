@@ -1,0 +1,22 @@
+.commentReplyTextArea {
+    width: 100% !important;
+    min-height: 100px;
+    margin-top: 10px;
+    padding: 10px 10px 50px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    field-sizing: content;
+}
+
+.commentReplyActions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.repliesContainer {
+    padding-top: 10px;
+    padding-left: 40px;
+    border-left: 1px solid #ccc;
+}

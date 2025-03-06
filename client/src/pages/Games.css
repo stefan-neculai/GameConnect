@@ -45,6 +45,7 @@
     /* Additional styles for each game panel */
     padding: 10px; /* Example padding */
     border: 1px solid #ccc; /* Example border */
+    
 }
 
 .gamePanel img {
@@ -106,10 +107,20 @@ cursor: not-allowed;
 .gamePanel {
   transition: transform 0.3s ease-in-out;
   outline: none;
+  background-color: #f5f5f5;
+  border-radius: 10px;
 }
 
 .gamePanel:hover {
   outline: 2px solid #313639 ; /* Change the color to offblack */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transform: scale(1.05);
+}
+
+.gamePanel svg  {
+  color: darkgoldenrod;
+}
+
+.gameTitle {
+  height: 50px;
 }

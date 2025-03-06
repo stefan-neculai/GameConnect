@@ -20,4 +20,9 @@
     max-height: 90%;
     overflow-y: auto; /* Allows scrolling within the modal */
   }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+  }
   

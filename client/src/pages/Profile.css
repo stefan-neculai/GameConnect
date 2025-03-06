@@ -21,6 +21,7 @@
     height: 80%;
     aspect-ratio: 1/1;
     object-fit: cover;
+    border: 1px solid #f0f0f0;
 }
 
 .profileHeaderTopRight {
@@ -36,7 +37,7 @@
 
 .favoriteGamesList {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* Default is 5 columns for larger screens */
+    grid-template-columns: repeat(4, 1fr); /* Default is 5 columns for larger screens */
 }
 
 .favoriteGame {

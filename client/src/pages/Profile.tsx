@@ -22,10 +22,11 @@ const Profile: React.FC = () => {
   const [isChatOpen, setChatOpen] = useState(false);
   const [favoriteGames, setFavoriteGames] = useState<Game[]>([]);
   const [posts, setPosts] = useState<any[]>([]);
-
+  const API_URL = process.env.REACT_APP_API_URL;
+  
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch('https://localhost:4000/api/user/' + id, {
+      const response = await fetch(`${API_URL}/user/` + id, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -39,7 +40,7 @@ const Profile: React.FC = () => {
     };
 
     const fetchFavoriteGames = async () => {
-      const response = await fetch(`https://localhost:4000/api/games/favorite/${id}`, {
+      const response = await fetch(`${API_URL}/games/favorite/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -53,7 +54,7 @@ const Profile: React.FC = () => {
     }
 
     const fetchPosts = async () => {
-      const response = await fetch(`https://localhost:4000/api/posts/author/${id}`, {
+      const response = await fetch(`${API_URL}/posts/author/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -82,7 +83,7 @@ const Profile: React.FC = () => {
       if (profile.banner) {
         formData.append('banner', profile.banner);
       }
-      const response = await fetch('https://localhost:4000/api/user/update/' + id, {
+      const response = await fetch(`${API_URL}/user/update/` + id, {
         method: 'PUT',
         credentials: 'include', // Ensure cookies are sent with the request
         body: formData
@@ -98,7 +99,7 @@ const Profile: React.FC = () => {
 
   const followUser = async (id : string | undefined) => {
     if (user) {
-      const response = await fetch(`https://localhost:4000/api/user/follow/${id}`, {
+      const response = await fetch(`${API_URL}/user/follow/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -107,7 +108,7 @@ const Profile: React.FC = () => {
       });
 
       if(response.ok && userData) { 
-        setUserData({...userData, followers: [...userData?.followers, user.id]});
+        setUserData({...userData, followers: [...userData?.followers, user._id]});
         console.log('User followed successfully');
       }
     }
@@ -115,7 +116,7 @@ const Profile: React.FC = () => {
 
   const unfollowUser = async (id : string | undefined) => {
     if (user) {
-      const response = await fetch(`https://localhost:4000/api/user/unfollow/${id}`, {
+      const response = await fetch(`${API_URL}/user/unfollow/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -124,7 +125,7 @@ const Profile: React.FC = () => {
       });
 
       if(response.ok && userData) { 
-        setUserData({...userData, followers: userData?.followers.filter(follower => follower !== user.id)});
+        setUserData({...userData, followers: userData?.followers.filter(follower => follower !== user._id)});
         console.log('User unfollowed successfully');
       }
     }
@@ -155,11 +156,11 @@ const Profile: React.FC = () => {
         <div className="profileHeaderRight">
           <div className="profileHeaderTopRight">
             <h2>{userData.username}</h2>
-            {id === user?.id && <button onClick={() => setModalOpen(true)}> Edit Profile </button>}
-            {user && userData.followers.includes(user.id)?
+            {id === user?._id && <button onClick={() => setModalOpen(true)}> Edit Profile </button>}
+            {user && userData.followers.includes(user._id)?
               <button onClick={() => unfollowUser(id)}> Unfollow </button>
-              : id !== user?.id && <button onClick={() => followUser(id)}> Follow </button>}
-            {id !== user?.id && <button onClick={() => setChatOpen(true)}> Message </button>}
+              : id !== user?._id && <button onClick={() => followUser(id)}> Follow </button>}
+            {id && user?._id && user._id != id && userData.followers.includes(user?._id) && userData.follows.includes(user?._id) && <button onClick={() => setChatOpen(true)}> Message </button>}
           </div>
           <div className="userCounts">
             <p onClick={() => setFollowersModalOpen(true)}> {userData.followers.length} followers </p>

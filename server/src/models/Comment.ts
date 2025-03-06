@@ -6,6 +6,7 @@ interface IComment extends Document {
   content: string;
   author: IAuthor; // Reference to the User who made the comment
   post: mongoose.Types.ObjectId; // Reference to the Post the comment belongs to
+  commentParent: mongoose.Types.ObjectId; // Reference to the
   createdAt: Date;
   likedBy: mongoose.Types.ObjectId[]; // Array of user IDs who have liked the comment
 }
@@ -14,7 +15,8 @@ interface IComment extends Document {
 const commentSchema = new Schema<IComment>({
   content: { type: String, required: true },
   author: { type: authorSchema, required: true },
-  post: { type: Schema.Types.ObjectId, ref: 'Post', required: true },
+  post: { type: Schema.Types.ObjectId, ref: 'Post' },
+  commentParent: { type: Schema.Types.ObjectId, ref: 'Comment' }, // Reference to the parent comment
   createdAt: { type: Date, default: Date.now },
   likedBy: [{ type: Schema.Types.ObjectId, ref: 'User' }] // References to users who have liked the comment
 });

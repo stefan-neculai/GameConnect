@@ -8,6 +8,7 @@ interface AuthContextType {
   user: User | null;
   handleLogin: () => void;
   setIsLoggedIn: (isLoggedIn: boolean) => void;
+  setUser: (user: User | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -20,12 +21,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
-
+  const API_URL = process.env.REACT_APP_API_URL;
   const handleLogin = () => {
     const token = document.cookie.split(';').find(cookie => cookie.trim().startsWith('token='));
     if (token) {
       const tokenValue = token.split('=')[1];
       const decoded: User = jwtDecode(tokenValue);
+      fetchUser(decoded.id);
       setIsLoggedIn(true);
       setUser(decoded);
     }
@@ -34,9 +36,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }
 
+  const fetchUser = async (id : string) => {
+    const response = await fetch(`${API_URL}/user/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+    if (response.ok) {
+      const data = await response.json();
+      console.log("User data: ", data);
+      setUser(data);
+    }
+  }
+
   useEffect(handleLogin, []);
   return (
-    <AuthContext.Provider value={{ handleLogin, isLoggedIn, user, setIsLoggedIn }}>
+    <AuthContext.Provider value={{ handleLogin, isLoggedIn, user, setIsLoggedIn, setUser }}>
       {children}
     </AuthContext.Provider>
   );

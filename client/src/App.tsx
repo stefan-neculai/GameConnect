@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -24,11 +24,16 @@ import {
   faBell,
 } from "@fortawesome/free-solid-svg-icons";
 import { useSocket } from "./context/SocketContext";
-
+import Chat from "./components/Chat";
+import Modal from "./components/Modal";
+import useSound from "use-sound";
+import notificationSound from "./assets/level-up-191997.mp3";
 const App: React.FC = () => {
   const { isLoggedIn, setIsLoggedIn, handleLogin, user } = useAuth();
   const { notifications } = useSocket();
+  const [isChatOpen, setChatOpen] = useState(false);
   const navigate = useNavigate();
+  const [playSound] = useSound(notificationSound);
 
   useEffect(handleLogin, []);
 
@@ -42,11 +47,11 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <header className="App-header">
-        {isLoggedIn && user && (
+      {isLoggedIn && <header className="App-header">
+        { user && (
           <>
             <div className="profileLink">
-              <Link to={"/profile/" + user.id}>
+              <Link to={"/profile/" + user._id}>
                 <img
                   src={`https://localhost:4000/${user.profilePicture}`}
                   alt="avatar"
@@ -74,17 +79,9 @@ const App: React.FC = () => {
               </Link>
             </div>
 
-            <div>
-              <Link to="/communities">
-                {" "}
-                <FontAwesomeIcon icon={faComment} />
-                <p> Chats </p>{" "}
-              </Link>
-            </div>
-
-            <div className="inboxIcon">
-              <FontAwesomeIcon icon={faBell} />
-              <p> Notifications </p>
+            <div className="inboxIcon" onClick={() => setChatOpen(true)}>
+              <FontAwesomeIcon icon={faComment} />
+              <p> Chats </p>
               {notifications.length != 0 && (
                 <div className="notificationCount">
                   {" "}
@@ -93,6 +90,7 @@ const App: React.FC = () => {
               )}
             </div>
 
+            
             <div onClick={handleLogout}>
               <FontAwesomeIcon
                 icon={faArrowRightFromBracket}
@@ -101,19 +99,11 @@ const App: React.FC = () => {
             </div>
           </>
         )}
-
-        {!isLoggedIn && (
-          <>
-            <div>
-              <Link to="/signup">Sign Up</Link>
-            </div>
-            <div className="loginLink">
-              <Link to="/login">Login</Link>
-            </div>
-          </>
-        )}
-      </header>
+      </header>}
       <main>
+      <Modal isOpen={isChatOpen} onClose={() => setChatOpen(false)}>
+        <Chat/>
+      </Modal>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />

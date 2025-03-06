@@ -15,10 +15,11 @@ const Following: React.FC<FollowingProps> = ({ followUser, unfollowUser, onClose
     const [following, setFollowing] = React.useState<User[]>([]);
     const { id } = useParams();
     const { user } = useAuth();
+    const API_URL = process.env.REACT_APP_API_URL;
     
     React.useEffect(() => {
         const fetchFollowing = async () => {
-            const response = await fetch(`https://localhost:4000/api/user/following/${id}`, {
+            const response = await fetch(`${API_URL}/user/following/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -36,7 +37,7 @@ const Following: React.FC<FollowingProps> = ({ followUser, unfollowUser, onClose
 
     return (
         <div className="followingModal">
-            <h1>List of Following</h1>
+            <h1>Following ({following.length})</h1>
             <ul className="followingList">
                
                 {following.map((follower, index) => (
@@ -45,9 +46,9 @@ const Following: React.FC<FollowingProps> = ({ followUser, unfollowUser, onClose
                             <img className="profilePicture" src={follower.profilePicture? "https://localhost:4000/" + follower.profilePicture : "https://localhost:4000/images/default.jpg"} alt="Profile Picture"/>
                             <p></p>{follower.username}
                         </Link>
-                        {user && follower.follows.includes(user.id)?
+                        {user && follower.follows.includes(user._id)?
                         <button onClick={() => unfollowUser(follower._id)}> Unfollow </button>
-                        : follower._id != user?.id && <button onClick={() => followUser(follower._id)}> Follow </button>}
+                        : follower._id != user?._id && <button onClick={() => followUser(follower._id)}> Follow </button>}
 
                     </li>
                 ))}

@@ -8,6 +8,7 @@ export interface IComment {
     _id: string;
     content: string;
     author: IAuthor;
-    createdAt: string;
+    createdAt: Date;
+    comments: IComment[];
     likedBy: string[];
   }

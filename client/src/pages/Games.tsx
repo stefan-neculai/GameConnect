@@ -15,14 +15,15 @@ const Games: React.FC = () => {
   const [mode, setMode] = useState('');
   const [genre, setGenre] = useState('');
   const [platform, setPlatform] = useState('');
-
+  const API_URL = process.env.REACT_APP_API_URL;
+  
   const changePage = (newPage: number) => {
     setCurrentPage(newPage);
     fetchGames(newPage, limit, search, genre, platform, mode);
   };
 
   const fetchGames = async (page : number, limit : number, search : string, genre : string, platform : string, mode :string) => {
-    const response = await fetch(`https://localhost:4000/api/games?page=${page}&limit=${limit}&search=${search}&genre=${genre}&platform=${platform}&mode=${mode}`, {
+    const response = await fetch(`${API_URL}/games?page=${page}&limit=${limit}&search=${search}&genre=${genre}&platform=${platform}&mode=${mode}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -137,7 +138,7 @@ const Games: React.FC = () => {
           <Link to={`/game/${game._id}`} key={game._id}>
             <div className="gamePanel">
               <img src={"//images.igdb.com/igdb/image/upload/t_cover_big/" + game.cover.url.split("/")[7]}></img>
-              <p>{game.name + ` (${new Date(game.first_release_date * 1000).getFullYear()})`}</p>
+              <p className="gameTitle">{game.name + ` (${new Date(game.first_release_date * 1000).getFullYear()})`}</p>
               <p> {game.averageRating} <FontAwesomeIcon icon={faStar}/></p>
             </div>
           </Link>

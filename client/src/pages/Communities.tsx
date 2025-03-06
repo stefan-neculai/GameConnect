@@ -11,10 +11,10 @@ const Communities: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { user } = useAuth();
     const { id } = useParams();
-    
+    const API_URL = process.env.REACT_APP_API_URL;
     useEffect(() => {
         async function fetchCommunities() {
-            const response = await fetch('https://localhost:4000/api/community', {
+            const response = await fetch(`${API_URL}/community`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -36,12 +36,12 @@ const Communities: React.FC = () => {
         formData.append('description', community.description);
         formData.append('relatedGame', community.relatedGame);
         if (user) 
-            formData.append('userId', user.id);
+            formData.append('userId', user._id);
         if (community.communityIcon) {
             formData.append('communityIcon', community.communityIcon);
         }
 
-        const response = await fetch('https://localhost:4000/api/community/create', {
+        const response = await fetch(`${API_URL}/community/create`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -59,7 +59,7 @@ const Communities: React.FC = () => {
     }
 
     const joinCommunity = async (communityId: string) => {
-        const response = await fetch(`https://localhost:4000/api/community/join/${communityId}`, {
+        const response = await fetch(`${API_URL}/community/join/${communityId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -73,7 +73,7 @@ const Communities: React.FC = () => {
     }
 
     const leaveCommunity = async (communityId: string) => {
-        const response = await fetch(`https://localhost:4000/api/community/leave/${communityId}`, {
+        const response = await fetch(`${API_URL}/community/leave/${communityId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -88,13 +88,12 @@ const Communities: React.FC = () => {
 
     return (
         <div>
-            <h1>Communities Page</h1>
+            <h1 className="pageHeader">Communities ({communities.length})  <button onClick={() => setIsModalOpen(true)} > Create Community</button></h1>
             {/* Add your content here */}
-            <button onClick={() => setIsModalOpen(true)} > Create Community</button>
+           
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                 <AddCommunityModal onCommunitySubmit={onCommunitySubmit} onClose={() => setIsModalOpen(false)} />
             </Modal>
-            <h1> Communities List </h1>
             <div className="communitiesList">
                 {communities.map((community) => {
                     return (
@@ -107,9 +106,9 @@ const Communities: React.FC = () => {
                             </Link>
                                 <p>{community.description}</p>
                                 <p> {community.members.length} Members</p>
-                                {user?.id && !community.members.includes(user?.id) &&  
+                                {user?._id && !community.members.includes(user?._id) &&  
                                 <button onClick={() => joinCommunity(community._id)}> Join Community </button>}
-                                {user?.id && community.members.includes(user?.id) &&
+                                {user?._id && community.members.includes(user?._id) &&
                                 <button className="negativeButton" onClick={() => leaveCommunity(community._id)}> Leave Community </button>}
                             </div>
 

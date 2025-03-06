@@ -42,6 +42,8 @@ interface PostsContextType {
   unlikePost: (postId: string) => Promise<any>;
   setOrder: React.Dispatch<React.SetStateAction<string>>;
   addComment: (postId: string, commentId: any) => void;
+  deletePost: (postId: string) => void;
+  editPost: (postId: string, newPost: { title: string; content: string; postImage: File | undefined }) => void;
 }
 
 const PostsContext = createContext<PostsContextType | undefined>(undefined);
@@ -57,7 +59,7 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
   const [order, setOrder] = useState("new");
   const observer = useRef<IntersectionObserver | null>(null);
   const { user } = useAuth();
-
+  const API_URL = process.env.REACT_APP_API_URL;
   // function that converts date to ago format
   const timeSince = (date: Date) => {
     const seconds = Math.floor(
@@ -101,7 +103,7 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
   const likePost = async (postId: string) => {
     // Like post and return smth
     const response = await fetch(
-      `https://localhost:4000/api/posts/${postId}/like`,
+      `${API_URL}/posts/${postId}/like`,
       {
         method: "PUT",
         headers: {
@@ -117,7 +119,7 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
     console.log("unliking post");
     // Unlike post and return smth
     const response = await fetch(
-      `https://localhost:4000/api/posts/${postId}/unlike`,
+      `${API_URL}/posts/${postId}/unlike`,
       {
         method: "PUT",
         headers: {
@@ -136,7 +138,7 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
     order: string
   ) => {
     const response = await fetch(
-      `https://localhost:4000/api/posts?communityIds=${communities.join(
+      `${API_URL}/posts?communityIds=${communities?.join(
         ","
       )}&page=${page}&limit=${limit}&order=${order}`,
       {
@@ -169,7 +171,7 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
     payload.append("community", post.communityId);
 
     if (user) {
-      payload.append("userId", user.id);
+      payload.append("userId", user._id);
       payload.append("username", user.username);
       payload.append("profilePic", user.profilePicture || "");
     }
@@ -179,18 +181,52 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
     }
     console.log(payload);
 
-    const response = await fetch("https://localhost:4000/api/posts/create", {
+    const response = await fetch("${API_URL}/posts/create", {
       method: "POST",
       credentials: "include", // Ensure cookies are sent with the request
       body: payload,
     });
 
+    const data = await response.json();
+    addPost(data);
+    
     return response;
   };
 
   const addPost = (newPost: IPost) => {
     setPosts((prevPosts) => [newPost, ...prevPosts]);
   };
+
+  const deletePost = async (postId: string) => {
+    // Delete post from API
+    const response = await fetch(`${API_URL}/posts/${postId}/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+
+    if (response.ok) {
+      // Update the posts state
+      setPosts(posts.filter((post) => post._id !== postId));
+    }
+  }
+
+  const editPost = async (postId: string, newPost: { title: string; content: string; postImage: File | undefined }) => {
+    const response = await fetch(`${API_URL}/posts/${postId}/update`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(newPost),
+    });
+
+    if(response.ok) {
+      setPosts(posts.map((post) => post._id === postId ? {...post, ...newPost} : post));
+    }
+  }
 
   const lastPostElementRef = useCallback(
     (node: HTMLDivElement) => {
@@ -218,7 +254,7 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
       setPosts(
         posts.map((post) => {
           if (post._id === postId) {
-            post.likedBy.push(user?.id || "");
+            post.likedBy.push(user?._id || "");
           }
           return post;
         })
@@ -237,7 +273,7 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
       setPosts(
         posts.map((post) => {
           if (post._id === postId) {
-            post.likedBy = post.likedBy.filter((id) => id !== user?.id);
+            post.likedBy = post.likedBy.filter((id) => id !== user?._id);
           }
           return post;
         })
@@ -269,7 +305,9 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
         likePost,
         unlikePost,
         setOrder,
-        addComment
+        addComment,
+        deletePost,
+        editPost
       }}
     >
       {children}
