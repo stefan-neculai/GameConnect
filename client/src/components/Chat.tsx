@@ -12,8 +12,6 @@ interface ChatProps {
   receiver?: User;
 }
 
-const ENDPOINT = "https://localhost:4000";
-
 const Chat: React.FC<ChatProps> = ({ receiver }) => {
   const [activeUser, setActiveUser] = useState<User | null>(null); // Add this line
   const [input, setInput] = useState<string>("");
@@ -21,7 +19,8 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const { user } = useAuth();
   const { messages, onlineUsers, typingUsers, socket, setOnlineUsers, setMessages, markMessagesAsSeen  } = useSocket();
-
+  const API_URL = process.env.REACT_APP_API_URL;
+  
   const getUserData = (id: string) => {
     if (id == user?._id) return user;
     return activeUser;
@@ -29,7 +28,7 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
 
   useEffect(() => {
     const fetchContacts = async () => {
-      const response = await fetch(`https://localhost:4000/api/user/contacts`, {
+      const response = await fetch(`${API_URL}/user/contacts`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +64,7 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
 
   const fetchMessages = async (receiverId : string) => {
     const response = await fetch(
-      `https://localhost:4000/api/messages?sender=${user?._id}&receiver=${receiverId}`,
+      `${API_URL}/messages?sender=${user?._id}&receiver=${receiverId}`,
       {
         method: "GET",
         headers: {
