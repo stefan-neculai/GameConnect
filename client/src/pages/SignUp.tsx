@@ -57,7 +57,7 @@ const SignupForm: React.FC = () => {
       console.log("Form is valid, submit data:", formData);
       // Submit form
       setLoading(true);
-      const response = await fetch("${API_URL}/signup", {
+      const response = await fetch(`${API_URL}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
