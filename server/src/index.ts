@@ -50,7 +50,7 @@ const server = https.createServer(options, app);
 // Create a Socket.IO server
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000', 'https://game-connect-onvu-75d7bfnl5-nstefancatalin-gmailcoms-projects.vercel.app'],
     methods: ['GET', 'POST'],
     credentials: true
   }

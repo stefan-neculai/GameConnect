@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -26,14 +26,12 @@ import {
 import { useSocket } from "./context/SocketContext";
 import Chat from "./components/Chat";
 import Modal from "./components/Modal";
-import useSound from "use-sound";
-import notificationSound from "./assets/level-up-191997.mp3";
+
 const App: React.FC = () => {
   const { isLoggedIn, setIsLoggedIn, handleLogin, user } = useAuth();
   const { notifications } = useSocket();
   const [isChatOpen, setChatOpen] = useState(false);
   const navigate = useNavigate();
-  const [playSound] = useSound(notificationSound);
 
   useEffect(handleLogin, []);
 
@@ -44,6 +42,16 @@ const App: React.FC = () => {
     // Optionally redirect the user to the login page
     navigate("/login");
   };
+
+  // ProtectedRoute.jsx - Only accessible when logged in
+  function ProtectedRoute({ children }: { children: React.ReactNode }) : JSX.Element {
+    return isLoggedIn ?  <>{children}</> : <Navigate to="/login" replace />;
+  }
+
+  // AuthRoute.jsx - Only accessible when logged out
+  function AuthRoute({ children }: { children: React.ReactNode }) : JSX.Element{
+    return !isLoggedIn ?  <>{children}</> : <Navigate to="/" replace />;
+  }
 
   return (
     <div className="App">
@@ -105,17 +113,18 @@ const App: React.FC = () => {
         <Chat/>
       </Modal>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/games" element={<Games />} />
-          <Route path="/communities" element={<Communities />} />
-          <Route path="/community/:id" element={<Community />} />
-          <Route path="/post/:id" element={<PostPage />} />
-          <Route path="/game/:id" element={<GameDetails />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/login" element={<AuthRoute><Login/></AuthRoute>} />
+          <Route path="/signup" element={<AuthRoute><SignUp /></AuthRoute>} />
+          <Route path="/" element={<ProtectedRoute><Home/></ProtectedRoute>} />
+          <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
+          <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
+          <Route path="/games" element={<ProtectedRoute><Games /></ProtectedRoute>} />
+          <Route path="/communities" element={<ProtectedRoute><Communities /></ProtectedRoute>} />
+          <Route path="/community/:id" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+          <Route path="/post/:id" element={<ProtectedRoute><PostPage /></ProtectedRoute>} />
+          <Route path="/game/:id" element={<ProtectedRoute><GameDetails /></ProtectedRoute>} />
+          <Route path="/profile/:id" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>
     </div>

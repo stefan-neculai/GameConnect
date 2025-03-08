@@ -68,7 +68,7 @@ const SignupForm: React.FC = () => {
       if (!response.ok) {
         return;
       }
-      const login = await fetch("${API_URL}/login", {
+      const login = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
