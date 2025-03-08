@@ -205,7 +205,7 @@ const GameDetails: React.FC = () => {
             <FontAwesomeIcon icon={faStar} />
           </h1>
 
-          {reviews.filter((r) => r.author.userId == user?._id).length == 0 && (
+          {reviews.filter((r) => r.author.userId === user?._id).length === 0 && (
             <button onClick={() => setModalOpen(true)}>Add Review</button>
           )}
           {id && !user?.favoriteGames?.includes(id) ? (

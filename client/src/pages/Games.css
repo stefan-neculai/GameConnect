@@ -1,7 +1,6 @@
 .gamesWrapper {
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-direction: column;
     gap: 10px;
 }
@@ -28,14 +27,14 @@
 }
 
 /* 2 columns for extra small screens (480px and above) */
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .gamesGrid {
       grid-template-columns: repeat(2, 1fr);
   }
 }
 
 /* 1 column for very small screens (below 480px) */
-@media (max-width: 320px) {
+@media (max-width: 450px) {
   .gamesGrid {
       grid-template-columns: 1fr;
   }
@@ -124,3 +123,63 @@ cursor: not-allowed;
 .gameTitle {
   height: 50px;
 }
+
+.gamesSearch {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  
+}
+
+.gamesSearch > *:nth-child(n+2) {
+  background-color: var(--color-primary-600);
+  border-radius: 4px;
+  padding: 5px 15px;
+  color: var(--color-neutral-100);
+  cursor: pointer;
+}
+
+.gamesSearch > *:nth-child(n+2):hover {
+  background-color: var(--color-primary-700);
+}
+
+.gamesSearchBar {
+  display: flex;
+  height: 36px;
+  width: 300px;
+  justify-content: left;
+  align-items: center;
+  border: 1px solid black;
+  border-radius: 12px;
+  padding-left: 10px;
+  gap: 10px;
+}
+
+.filterOptions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--size-4);
+}
+
+.gamesSearchInput {
+  border: none;
+  outline: none;
+  flex-grow: 1;
+}
+
+.filterPills {
+  display: flex;
+  gap: var(--size-2);
+  flex-wrap: wrap;
+}
+
+.filterPill {
+  background-color: var(--color-primary-500);
+  color: var(--color-neutral-100);
+  border-radius: 12px;
+  padding: 5px 15px;
+  cursor: pointer;
+}
+

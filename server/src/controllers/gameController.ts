@@ -9,10 +9,11 @@ export const getGames = async (req: Request, res: Response): Promise<void> => {
     const limit: number = parseInt(req.query.limit as string) || 10;
     const skip: number = (page - 1) * limit;
     const search: string = (req.query.search as string) || '';
-    const genre: string = (req.query.genre as string) || '';
-    const platform: string = (req.query.platform as string) || '';
-    const mode: string = (req.query.mode as string) || '';
-
+    const genres: string[] = req.query.genres ? (req.query.genres as string).split(',').filter(g => g.trim() !== '') : [];
+    const platforms: string[] = req.query.platforms ? (req.query.platforms as string).split(',').filter(p => p.trim() !== '') : [];
+    const modes: string[] = req.query.modes ? (req.query.modes as string).split(',').filter(m => m.trim() !== '') : [];
+    
+    
     try {
         // Create a search query object for genre, platform, multiplayer options
         const searchQuery: any = {};
@@ -21,18 +22,25 @@ export const getGames = async (req: Request, res: Response): Promise<void> => {
             searchQuery.name = { $regex: search, $options: 'i' };
         }
 
-        // check if the genres array contains the searched genre
-        if (genre != '') {
-            searchQuery.genres = { $elemMatch: { name: genre } };
+        console.log(genres);
+
+        if (genres.length !== 0) {
+            searchQuery["genres.name"] = {
+                $all: genres
+            }
+
         }
-        if (platform != '') {
-            searchQuery.platforms = { $elemMatch: { name: platform }};
+        if (platforms.length !== 0) {
+            searchQuery["platforms.name"] = {
+                $all: platforms
+            }
         }
-        if (mode != '') {
-            searchQuery.game_modes = { $elemMatch: { name: mode }};
+        if (modes.length !== 0) {
+            searchQuery["game_modes.name"] = {
+                $all: modes
+            }
         }
 
-        
         // Get the total count of games that match the search query
         const totalGames = await Game.countDocuments(searchQuery);
         

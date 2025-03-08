@@ -1,0 +1,58 @@
+:root {
+  /* Primary color scheme - Blueish */
+  --color-primary-50: #f0f9ff;  /* Lightest - backgrounds */
+  --color-primary-100: #e0f2fe; /* Light - hover states */
+  --color-primary-500: #0ea5e9; /* Main - buttons, links */
+  --color-primary-600: #0284c7; /* Darker - button hover */
+  --color-primary-700: #0369a1; /* Darkest - active states */
+  
+  /* Neutral colors */
+  --color-neutral-100: #f5f5f5; /* Lightest - backgrounds */
+  --color-neutral-300: #d4d4d4; /* Light - borders */
+  --color-neutral-500: #737373; /* Medium - secondary text */
+  --color-neutral-900: #171717; /* Darkest - main text */
+  
+  /* Semantic colors */
+  --color-success: #22c55e;     /* Green - success states */
+  --color-warning: #eab308;     /* Yellow - warning states */
+  --color-danger: #ef4444;      /* Red - errors, dangerous actions */
+  --color-info: #3b82f6;        /* Blue - informational */
+  
+  /* Spacing/sizing scale (in px) */
+  --size-1: 4px;   /* Tiny */
+  --size-2: 8px;   /* Extra small */
+  --size-3: 12px;  /* Small */
+  --size-4: 16px;  /* Base - most common */
+  --size-5: 20px;  /* Medium */
+  --size-6: 24px;  /* Large */
+  --size-8: 32px;  /* Extra large */
+  --size-12: 48px; /* 2x large */
+  --size-16: 64px; /* 3x large */
+  
+  /* Font settings */
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  
+  /* Font sizes */
+  --text-xs: 0.75rem;   /* 12px */
+  --text-sm: 0.875rem;  /* 14px */
+  --text-base: 1rem;    /* 16px */
+  --text-lg: 1.125rem;  /* 18px */
+  --text-xl: 1.25rem;   /* 20px */
+  --text-2xl: 1.5rem;   /* 24px */
+  
+  /* Font weights */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  
+  /* Border radius */
+  --radius-sm: 0.125rem;  /* 2px */
+  --radius-md: 0.25rem;   /* 4px */
+  --radius-lg: 0.5rem;    /* 8px */
+  --radius-full: 9999px;  /* For pills/badges */
+  
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  }

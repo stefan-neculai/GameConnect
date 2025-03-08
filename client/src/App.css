@@ -1,6 +1,7 @@
 html {
   overflow: auto;
   min-height: 100vh;
+  font-family: var(--font-family);
 }
 
 body {

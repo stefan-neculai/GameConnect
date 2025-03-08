@@ -26,6 +26,7 @@ import {
 import { useSocket } from "./context/SocketContext";
 import Chat from "./components/Chat";
 import Modal from "./components/Modal";
+import './variables.css';
 
 const App: React.FC = () => {
   const { isLoggedIn, setIsLoggedIn, handleLogin, user } = useAuth();

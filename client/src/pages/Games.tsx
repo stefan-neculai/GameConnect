@@ -3,7 +3,8 @@ import { Game } from '../types/Game';
 import './Games.css';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { genreOptions, modeOptions, platformOptions } from '../constants/filterOptions';
 
 const Games: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
@@ -15,15 +16,26 @@ const Games: React.FC = () => {
   const [mode, setMode] = useState('');
   const [genre, setGenre] = useState('');
   const [platform, setPlatform] = useState('');
+  const [isFilterOpen, setIsFilterOpen] = useState<{genre : boolean, platform : boolean, mode : boolean}>({
+    genre: false,
+    platform: false,
+    mode: false,
+  });
+  const [selectedFilter, setSelectedFilter] = useState<{ genre : string[], platform : string[], mode : string[]}>({
+    genre: [],
+    platform: [],
+    mode: [],
+  });
+
   const API_URL = process.env.REACT_APP_API_URL;
   
   const changePage = (newPage: number) => {
     setCurrentPage(newPage);
-    fetchGames(newPage, limit, search, genre, platform, mode);
+    fetchGames(newPage, limit);
   };
 
-  const fetchGames = async (page : number, limit : number, search : string, genre : string, platform : string, mode :string) => {
-    const response = await fetch(`${API_URL}/games?page=${page}&limit=${limit}&search=${search}&genre=${genre}&platform=${platform}&mode=${mode}`, {
+  const fetchGames = async (page : number, limit : number) => {
+    const response = await fetch(`${API_URL}/games?page=${page}&limit=${limit}&search=${search}&genres=${selectedFilter.genre}&platforms=${selectedFilter.platform}&modes=${selectedFilter.mode}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -36,102 +48,115 @@ const Games: React.FC = () => {
       setlastPage(Math.round(data.total / limit));
       setGames(data.games);
     }
-
   };
-  useEffect(() => {
-    
 
-    fetchGames(1,10,'', '', '', ' ');
+  const debounce = (func: Function, wait: number) => {
+    let timeout: NodeJS.Timeout;
+    return function executedFunction(...args: any) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      }
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  };
+  const handleDebouncedSearch = debounce(fetchGames, 500);
+
+  useEffect(() => {
+    fetchGames(1,10);
   }, []);
 
-  const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value);
-    fetchGames(1,10,event.target.value, genre, platform, mode);  
+  useEffect(() => {
+    handleDebouncedSearch(currentPage, limit);
+  }
+  ,[selectedFilter, search]);
+
+
+  const handleFilterOpen = (filter: keyof typeof isFilterOpen) => {
+    setIsFilterOpen({...isFilterOpen, [filter]: !isFilterOpen[filter]});
+  };
+
+  const handleSetFilter = (filter: keyof typeof isFilterOpen, value: string) => {
+    if(selectedFilter[filter].includes(value)) {
+      setSelectedFilter({
+        ...selectedFilter,
+        [filter]: selectedFilter[filter].filter((el) => el !== value)
+      });
+    } else {
+      setSelectedFilter({
+        ...selectedFilter,
+        [filter]: [...selectedFilter[filter], value]
+      })
+    }
   }
 
-  const handleModeChange = (event : React.ChangeEvent<HTMLSelectElement>) => {
-    setMode(event.target.value);
-    fetchGames(1,10, search, genre, platform, event.target.value); 
-  };
-
-  const handleGenreChange = (event : React.ChangeEvent<HTMLSelectElement>) => {
-    setGenre(event.target.value);
-    fetchGames(1,10, search, event.target.value, platform, mode); 
-  };
-
-  const handlePlatformChange = (event : React.ChangeEvent<HTMLSelectElement>) => {
-    setPlatform(event.target.value);
-    fetchGames(1,10, search, genre, event.target.value, mode); 
-  };
-
+  const isChecked = (filter: keyof typeof isFilterOpen, option: string) => {
+    return selectedFilter[filter].includes(option);
+  }
 
   return (
     <div className="gamesWrapper">
       <h1>Games List</h1> 
-      <div className="gamesInputs">
-        <input type="text" onChange={handleSearch} className=''/>
-        <select 
-          value={mode} 
-          onChange={handleModeChange}
-        >
-          <option value=""> Game Mode </option>
-          <option value="Multiplayer">Multiplayer</option>
-          <option value="Single player">Singleplayer</option>
-          <option value="Co-operative">Co-operative</option>
-          <option value="Split screen">Split screen</option>
-          <option value="Massively Multiplayer Online (MMO)">MMO</option>
-          <option value="Battle Royale">Battle Royale</option>
-
-        </select>
-        <select 
-          value={genre} 
-          onChange={handleGenreChange}
-        >
-          <option value="">Genre</option>
-          <option value="Shooter">Shooter</option>
-          <option value="Adventure">Adventure</option>
-          <option value="Platform"> Platformer </option>
-          <option value="Arcade"> Arcade </option>
-          <option value="Role-playing (RPG)">RPG</option>
-          <option value="Strategy">Strategy</option>
-          <option value="Real Time Strategy (RTS)"> RTS </option>
-          <option value="MOBA" > MOBA </option>
-          <option value="Simulator"> Simulator </option>
-          <option value="Sport"> Sport </option>
-          <option value="Racing"> Racing </option>
-          <option value="Fighting"> Fighting </option>
-          <option value="Music"> Music </option>
-          <option value="Puzzle"> Puzzle </option>
-          <option value="Indie"> Indie </option>
-          <option value="Pinball"> Pinball </option>
-          <option value="Tactical"> Tactical </option>
-          <option value="Hack and slash/Beat 'em up"> Hack and slash </option>
-          <option value="Quiz/Trivia"> Quiz </option>
-          <option value="Turn-based strategy (TBS)"> Turn-based strategy </option>
-          <option value="Visual Novel"> Visual Novel </option>
-
-        </select>
-        <select 
-          value={platform} 
-          onChange={handlePlatformChange}
-        >
-          <option value="">Platform</option>
-          <option value="PC (Microsoft Windows)">PC</option>
-          <option value="Linux">Linux</option>
-          <option value="Mac">Mac</option>
-          <option value="PlayStation 5">PS5</option>
-          <option value="PlayStation 4">PS4</option>
-          <option value="PlayStation 3">PS3</option>
-          <option value="PlayStation 2">PS2</option>
-          <option value="PlayStation">PS</option>
-          <option value="Xbox Series X|S">Xbox Series X</option>
-          <option value="Xbox One">Xbox One</option>
-          <option value="Xbox 360">Xbox 360</option>
-          <option value="Xbox">Xbox</option>
-          <option value="Nintendo Switch">Switch</option>
-        </select>
+      <div className="gamesSearch">
+        <div className="gamesSearchBar">
+          <FontAwesomeIcon icon={faSearch} /> 
+          <input className="gamesSearchInput" onChange={(e) => setSearch(e.target.value)} placeholder=''/>
+        </div>
+          <div onClick={() => handleFilterOpen("genre")} className="genreFilter">
+            Genre
+          </div>
+          <div onClick={() => handleFilterOpen("platform")} className="platformFilter">
+            Platform
+          </div>
+          <div onClick={() => handleFilterOpen("mode")} className="modeFilter">
+            Mode
+          </div>
       </div>
-
+      {isFilterOpen.genre && <div className="filterOptions">
+        {genreOptions.map(option => (
+          <div className="filterOption" key={option}>
+            <input type="checkbox" value={option} onChange={() => handleSetFilter("genre", option)} checked={isChecked("genre", option)}/>
+            <label> {option} </label>
+          </div>
+        ))}
+        </div>
+      }
+      {isFilterOpen.platform && <div className="filterOptions">
+        {platformOptions.map(option => (
+          <div className="filterOption" key={option}>
+            <input type="checkbox" value={option} onChange={() => handleSetFilter("platform", option)} checked={isChecked("platform", option)}/>
+            <label> {option} </label>
+          </div>
+        ))}
+        </div>
+      }
+      {isFilterOpen.mode && <div className="filterOptions">
+        {modeOptions.map(option => (
+          <div className="filterOption" key={option}>
+            <input type="checkbox" value={option} onChange={() => handleSetFilter("mode", option)} checked={isChecked("mode", option)}/>
+            <label> {option} </label>
+          </div>
+        ))}
+        </div>
+      }
+      <div className="filterPills">
+        {selectedFilter.genre.map(filter => (
+          <div className="filterPill" key={filter}>
+            {filter}
+          </div>
+        ))}
+        {selectedFilter.platform.map(filter => (
+          <div className="filterPill" key={filter}>
+            {filter}
+          </div>
+        ))}
+        {selectedFilter.mode.map(filter => (
+          <div className="filterPill" key={filter}>
+            {filter}
+          </div>
+        ))}
+      </div>
 
       <div className="gamesGrid">
         {games && games.map(game => (
