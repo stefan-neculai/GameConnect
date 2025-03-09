@@ -38,7 +38,6 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("contacts: ", data)
         setActiveUser(data.find((contact : any) => contact._id == receiver?._id) || null);
         setContacts(data);
         if(!receiver)
@@ -107,12 +106,12 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
   const handleKeyPress = (e: any) => {
     if(e.target.value.length > 0 && !isTyping) {
       socket?.emit('typing', { sender: user?._id, receiver: activeUser?._id });
-      console.log("typing");
+
       setIsTyping(true);
     }
     else if(e.target.value.length === 0 && isTyping) {
       socket?.emit('stopTyping', { sender: user?._id, receiver: activeUser?._id });
-      console.log("stop typing");
+
       setIsTyping(false);
     }
     setInput(e.target.value);

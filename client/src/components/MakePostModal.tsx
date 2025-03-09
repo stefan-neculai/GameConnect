@@ -18,7 +18,6 @@ const MakePostModal: React.FC<MakePostModalProps> = ({ onClose }) => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log({ title, content, postImage, id });
     if(id) {
       const response = await submitPost({ title, content, postImage, communityId: id});
       if(response.ok) {
@@ -28,7 +27,6 @@ const MakePostModal: React.FC<MakePostModalProps> = ({ onClose }) => {
   };
 
   const handlePostImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.files ? e.target.files[0] : null);
     setPostImage(e.target.files ? e.target.files[0] : undefined);
   };
 

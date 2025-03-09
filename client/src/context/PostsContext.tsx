@@ -116,7 +116,6 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const unlikePost = async (postId: string) => {
-    console.log("unliking post");
     // Unlike post and return smth
     const response = await fetch(
       `${API_URL}/posts/${postId}/unlike`,
@@ -151,7 +150,6 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({
     );
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       return data;
     }
     return null;

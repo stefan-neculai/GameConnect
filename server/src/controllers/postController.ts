@@ -11,6 +11,7 @@ export const getPosts = async (req: Request, res: Response) => {
   const communityIds: string[] = (req.query.communityIds as string).split(",");
   const order = req.query.order as string;
 
+  console.log(page, limit, skip, order)
   console.log(communityIds)
   const validIds = communityIds.filter((id) => id !== '').map((id) => new mongoose.Types.ObjectId(id));
   try {
@@ -26,9 +27,9 @@ export const getPosts = async (req: Request, res: Response) => {
       sort = { createdAt: 1 };
     }
 
-    
+    console.log(searchQuery)
     const totalPosts = await Post.countDocuments(searchQuery);
-
+    console.log(totalPosts)
     let posts;
     if (order === "top") {
       posts = await Post.aggregate([
@@ -42,6 +43,7 @@ export const getPosts = async (req: Request, res: Response) => {
       posts = await Post.find(searchQuery).sort(sort).skip(skip).limit(limit);
     }
 
+    console.log(posts)
     res.status(200).json({
       total: totalPosts,
       page,

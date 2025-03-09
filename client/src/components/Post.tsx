@@ -43,7 +43,6 @@ const Post: React.FC<PostProps> = ({ post, elementRef, community }) => {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
       }
     };
 
@@ -125,6 +124,7 @@ const Post: React.FC<PostProps> = ({ post, elementRef, community }) => {
           {/* Display the post image if it exists */}
           {post?.photo && (
             <div className="postPhotoWrapper">
+              <div className="background-blur" style={{ backgroundImage: `url(https://localhost:4000/${post.photo})` }}></div>
               <img
                 className="postPhoto"
                 src={`https://localhost:4000/${post.photo}`}

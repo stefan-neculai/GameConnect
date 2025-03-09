@@ -6,14 +6,7 @@ import BreadcrumbNavigator from '../components/BreadcrumbNavigator';
 import './Home.css';
 const Home: React.FC = () => {
   const { user } = useAuth();
-  const { setPage, setPosts, setTotal } = usePosts();
   
-  useEffect(() => {
-     setPage(1);
-     setPosts([]);
-     setTotal(0);
-  }, [user]);
-
   if(user?.communities)
     return (
       <div className="homeContainer">

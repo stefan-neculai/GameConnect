@@ -19,12 +19,10 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ onProfileSubmit, on
   };
 
   const handleProfilePicChange = (e : any) => {
-    console.log(e.target.files[0])
     setProfilePicture(e.target.files[0]);
   };
 
   const handleBannerChange = (e : any) => {
-    console.log(e.target.files[0])
     setBanner(e.target.files[0]);
   };
 

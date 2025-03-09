@@ -36,6 +36,11 @@ const App: React.FC = () => {
 
   useEffect(handleLogin, []);
 
+  useEffect(() => {
+    console.log("isLoggedIn state changed to:", isLoggedIn);
+  }, [isLoggedIn]);
+
+
   const handleLogout = () => {
     // Clear cookie by setting its expiry to the past
     document.cookie = "token=; Max-Age=0; path=/;";

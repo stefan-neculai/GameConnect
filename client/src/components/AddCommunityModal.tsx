@@ -34,7 +34,6 @@ const AddCommunityModal: React.FC<AddCommunityModalProps> = ({ onCommunitySubmit
   };
 
   const handleCommunityIconChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.files ? e.target.files[0] : null);
     setCommunityIcon(e.target.files ? e.target.files[0] : undefined);
   };
 
@@ -49,7 +48,7 @@ const AddCommunityModal: React.FC<AddCommunityModalProps> = ({ onCommunitySubmit
         });
         if (response.ok) {
         const data = await response.json();
-        console.log(data);
+
         setSearchResults(data.games);
         }
     } 
@@ -59,7 +58,6 @@ const AddCommunityModal: React.FC<AddCommunityModalProps> = ({ onCommunitySubmit
   }
 
     const handleSearch = async (event: React.FormEvent<HTMLLabelElement>) => {
-        console.log("lmao")
         event.preventDefault();
         setSearchQuery(event.currentTarget.textContent || '');
         fetchSearchResults(event.currentTarget.textContent || '');

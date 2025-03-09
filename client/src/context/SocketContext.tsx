@@ -57,23 +57,19 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     });
 
     socket.on("userOnline", (data: { onlineUsers: string[] }) => {
-      console.log("Users online: ", data.onlineUsers);
       setOnlineUsers((prevUsers) => data.onlineUsers);
     });
 
     socket.on("userOffline", (data: { userId: string }) => {
-      console.log("User offline: ", data.userId);
       setOnlineUsers((prevUsers) => prevUsers.filter((id) => id !== data.userId));
     });
 
     socket.on("typing", (data: { receiver: string; sender: string }) => {
       setTypingUsers((prevUsers) => [...prevUsers, data.sender]);
-      console.log("Typing: ", data);
     });
 
     socket.on("stopTyping", (data: { receiver: string; sender: string }) => {
       setTypingUsers((prevUsers) => prevUsers.filter((id) => id !== data.sender));
-      console.log("Stop typing: ", data);
     });
 
     // Clean up the connection on component unmount

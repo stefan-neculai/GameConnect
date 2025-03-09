@@ -101,7 +101,7 @@ const Games: React.FC = () => {
       <div className="gamesSearch">
         <div className="gamesSearchBar">
           <FontAwesomeIcon icon={faSearch} /> 
-          <input className="gamesSearchInput" onChange={(e) => setSearch(e.target.value)} placeholder=''/>
+          <input className="gamesSearchInput" onChange={(e) => setSearch(e.target.value)} placeholder='Search games...'/>
         </div>
           <div onClick={() => handleFilterOpen("genre")} className="genreFilter">
             Genre
@@ -163,7 +163,8 @@ const Games: React.FC = () => {
           <Link to={`/game/${game._id}`} key={game._id}>
             <div className="gamePanel">
               <img src={"//images.igdb.com/igdb/image/upload/t_cover_big/" + game.cover.url.split("/")[7]}></img>
-              <p className="gameTitle">{game.name + ` (${new Date(game.first_release_date * 1000).getFullYear()})`}</p>
+              <p className="gameTitle">{game.name}</p>
+              <p>{new Date(game.first_release_date * 1000).getFullYear()} </p>
               <p> {game.averageRating} <FontAwesomeIcon icon={faStar}/></p>
             </div>
           </Link>

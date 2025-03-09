@@ -176,13 +176,16 @@ button:hover {
   max-height: 500px;
   align-self: center;
   background-color: white;
+  z-index: 2;
+
 }
 
 .postPhotoWrapper {
   width: 100%;
-  background-color: #181817;
   display: flex;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .point {
@@ -246,4 +249,16 @@ button:hover {
 
 .breadCrumbNav{
   align-self: flex-start;
+}
+
+.background-blur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(10px) brightness(0.5);
+  transform: scale(1.2); /* Slightly enlarge to avoid edge artifacts */
 }

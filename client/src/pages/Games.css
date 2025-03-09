@@ -121,7 +121,8 @@ cursor: not-allowed;
 }
 
 .gameTitle {
-  height: 50px;
+  height: 30px;
+  font-weight: var(--font-semibold);
 }
 
 .gamesSearch {
@@ -152,8 +153,8 @@ cursor: not-allowed;
   justify-content: left;
   align-items: center;
   border: 1px solid black;
-  border-radius: 12px;
-  padding-left: 10px;
+  border-radius: 20px;
+  padding: 0 10px;
   gap: 10px;
 }
 

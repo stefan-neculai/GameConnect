@@ -45,7 +45,7 @@ const Comment: React.FC<CommentProps> = ({comment, handleLike, handleUnlike, com
             profilePic: user?.profilePicture,
             },
         };
-        console.log(payload);
+
         const response = await fetch(`${API_URL}/comments/create`, {
             method: "POST",
             headers: {
@@ -56,7 +56,7 @@ const Comment: React.FC<CommentProps> = ({comment, handleLike, handleUnlike, com
         });
         if (response.ok) {
             const data = await response.json();
-            console.log(data);
+    
             setReplies([...replies, data]);
             }
         };
