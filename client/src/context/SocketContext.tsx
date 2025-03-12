@@ -23,7 +23,7 @@ interface SocketProviderProps {
 }
 
 export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
-  const endpoint = "https://localhost:4000";
+  const endpoint = process.env.REACT_APP_SOCKET_ENDPOINT || 'http://localhost:4000';
   const [socket, setSocket] = useState<Socket | null>(null);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const [messages, setMessages] = useState<IMessage[]>([]);

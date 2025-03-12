@@ -35,6 +35,8 @@ export const signUp = async (req: Request, res: Response): Promise<void> => {
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
+  console.log(email, password);
+  console.log(await User.find());
   try {
     const user = await User.findOne({ email });
     if (!user) {

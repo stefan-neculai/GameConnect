@@ -43,7 +43,7 @@ const Following: React.FC<FollowingProps> = ({ followUser, unfollowUser, onClose
                 {following.map((follower, index) => (
                     <li key={index}>
                         <Link to={`/profile/${follower._id}`} onClick={onClose}>
-                            <img className="profilePicture" src={follower.profilePicture? "https://localhost:4000/" + follower.profilePicture : "https://localhost:4000/images/default.jpg"} alt="Profile Picture"/>
+                            <img className="profilePicture" src={follower.profilePicture? `${API_URL}` + follower.profilePicture : `${API_URL}/../images/default.jpg`} alt="Profile Picture"/>
                             <p></p>{follower.username}
                         </Link>
                         {user && follower.follows.includes(user._id)?

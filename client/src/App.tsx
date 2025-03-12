@@ -33,6 +33,7 @@ const App: React.FC = () => {
   const { notifications } = useSocket();
   const [isChatOpen, setChatOpen] = useState(false);
   const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(handleLogin, []);
 
@@ -67,7 +68,7 @@ const App: React.FC = () => {
             <div className="profileLink">
               <Link to={"/profile/" + user._id}>
                 <img
-                  src={`https://localhost:4000/${user.profilePicture}`}
+                  src={`${API_URL}/../${user.profilePicture}`}
                   alt="avatar"
                 />
                 <p> {user.username} </p>

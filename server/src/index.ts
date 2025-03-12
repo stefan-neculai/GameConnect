@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import https from 'https';
+import http from 'http';
 import fs from 'fs';
 import path from 'path';
 import cookieParser from 'cookie-parser';
@@ -18,8 +19,11 @@ import socketHandler from './controllers/socketController';
 const app = express();
 const port = 4000;
 
+if(!process.env.CORS_ORIGIN_URL) {
+  throw new Error('CORS_ORIGIN_URL environment variable is not defined');
+}
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin:  process.env.CORS_ORIGIN_URL,
   credentials: true
 }));
 app.use(cookieParser()); 
@@ -38,19 +42,34 @@ app.use('/api', messageRoutes);
 // Serve static files from the 'images' directory
 app.use('/images', express.static(path.join(__dirname, '../images')));
 
-// SSL options
-const options = {
-  key: fs.readFileSync(path.join(__dirname, '../cert/private.key')),
-  cert: fs.readFileSync(path.join(__dirname, '../cert/certificate.crt'))
-};
+// add simle html response for /home
+app.get('/home', (req, res) => {
+  // can i send a html file? like index.html
+  res.sendFile(path.join(__dirname, '../index.html'));
 
-// Create HTTPS server
-const server = https.createServer(options, app);
+});
+
+let options, server;
+if(process.env.NODE_ENV === 'production') {
+  options = {
+    key: fs.readFileSync(path.join(__dirname, '../cert/private.key')),
+    cert: fs.readFileSync(path.join(__dirname, '../cert/certificate.crt'))
+  };
+  server = https.createServer(options, app);
+}
+else {
+  options = {
+    key: fs.readFileSync(path.join(__dirname, '../cert/local/private.key')),
+    cert: fs.readFileSync(path.join(__dirname, '../cert/local/certificate.crt'))
+  };
+  server = http.createServer(app);
+}
+
 
 // Create a Socket.IO server
 const io = new Server(server, {
   cors: {
-    origin: ['http://localhost:3000', 'https://game-connect-onvu-75d7bfnl5-nstefancatalin-gmailcoms-projects.vercel.app'],
+    origin: process.env.CORS_ORIGIN_URL,
     methods: ['GET', 'POST'],
     credentials: true
   }

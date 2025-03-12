@@ -90,7 +90,7 @@ const Post: React.FC<PostProps> = ({ post, elementRef, community }) => {
       {post && (
         <div key={post._id} className="postContainer" ref={elementRef} onClick={navigateToPost}>
           <ImageModal
-            imageUrl={`https://localhost:4000/${post.photo}`}
+            imageUrl={`${API_URL}/../${post.photo}`}
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
           />
@@ -100,7 +100,7 @@ const Post: React.FC<PostProps> = ({ post, elementRef, community }) => {
           
           <div className="postAuthor" onClick={navigateToProfile}>
             <img
-              src={`https://localhost:4000/${post.author.profilePic}`}
+              src={`${API_URL}/../${post.author.profilePic}`}
               alt={post.author.username}
             />
             <p>{post.author.username}</p>
@@ -124,10 +124,10 @@ const Post: React.FC<PostProps> = ({ post, elementRef, community }) => {
           {/* Display the post image if it exists */}
           {post?.photo && (
             <div className="postPhotoWrapper">
-              <div className="background-blur" style={{ backgroundImage: `url(https://localhost:4000/${post.photo})` }}></div>
+              <div className="background-blur" style={{ backgroundImage: `url(${API_URL}/../${post.photo})` }}></div>
               <img
                 className="postPhoto"
-                src={`https://localhost:4000/${post.photo}`}
+                src={`${API_URL}/../${post.photo}`}
                 alt={post.title}
                 onClick={handleModal}
               />

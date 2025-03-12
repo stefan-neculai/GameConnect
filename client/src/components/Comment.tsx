@@ -68,7 +68,7 @@ const Comment: React.FC<CommentProps> = ({comment, handleLike, handleUnlike, com
                 <div key={comment._id} className="commentContainer">
                     <div className="commentAuthor">
                     <img
-                        src={`https://localhost:4000/${comment.author.profilePic}`}
+                        src={`${API_URL}/../${comment.author.profilePic}`}
                         alt={comment.author.username}
                     />
                     <h3>{comment.author.username}</h3>

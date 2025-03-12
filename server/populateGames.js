@@ -14,7 +14,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (g && (g = 0, op[0] && (_ = 0)), _) try {
+        while (_) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -35,34 +35,21 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 var dotenv = require("dotenv");
 var mongoose_1 = require("mongoose");
 var axios_1 = require("axios");
 var Game_1 = require("./src/models/Game"); // Adjust this path as needed to match your Game model file location
 dotenv.config();
-var fetchGames = function () {
-    var args_1 = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args_1[_i] = arguments[_i];
-    }
-    return __awaiter(void 0, __spreadArray([], args_1, true), void 0, function (offset) {
+var fetchGames = function (offset) {
+    if (offset === void 0) { offset = 0; }
+    return __awaiter(void 0, void 0, void 0, function () {
         var response, error_1;
-        if (offset === void 0) { offset = 0; }
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 5, , 6]);
-                    return [4 /*yield*/, (0, axios_1.default)({
+                    return [4 /*yield*/, (0, axios_1["default"])({
                             url: 'https://api.igdb.com/v4/games',
                             method: 'POST',
                             headers: {
@@ -75,7 +62,7 @@ var fetchGames = function () {
                 case 1:
                     response = _a.sent();
                     if (!response.data.length) return [3 /*break*/, 3];
-                    return [4 /*yield*/, Game_1.default.insertMany(response.data.map(function (item) {
+                    return [4 /*yield*/, Game_1["default"].insertMany(response.data.map(function (item) {
                             var _a;
                             return ({
                                 id: item.id,
@@ -102,24 +89,23 @@ var fetchGames = function () {
                     return [3 /*break*/, 4];
                 case 3:
                     console.log('No more games to fetch.');
-                    mongoose_1.default.disconnect();
+                    mongoose_1["default"].disconnect();
                     _a.label = 4;
                 case 4: return [3 /*break*/, 6];
                 case 5:
                     error_1 = _a.sent();
                     console.error('Error fetching games:', error_1.message);
-                    mongoose_1.default.disconnect();
+                    mongoose_1["default"].disconnect();
                     return [3 /*break*/, 6];
                 case 6: return [2 /*return*/];
             }
         });
     });
 };
-mongoose_1.default.connect(process.env.MONGODB_URI)
+mongoose_1["default"].connect(process.env.MONGODB_URI)
     .then(function () {
     console.log('Connected to MongoDB');
     fetchGames(); // Initial call to start the process
-})
-    .catch(function (err) {
+})["catch"](function (err) {
     console.error('Could not connect to MongoDB:', err.message);
 });

@@ -150,9 +150,9 @@ const Profile: React.FC = () => {
       <Modal isOpen={isChatOpen} onClose={() => setChatOpen(false)}>
         <Chat receiver={userData} />
       </Modal>
-      <img className="banner" src={userData.banner? "https://localhost:4000/" + userData.banner : defaultPicURL}/>
+      <img className="banner" src={userData.banner? `${API_URL}/../${userData.banner}` : defaultPicURL}/>
       <div className="profileHeader">
-        <img className="profilePicture" src={userData.profilePicture? "https://localhost:4000/" + userData.profilePicture : defaultPicURL}/>
+        <img className="profilePicture" src={userData.profilePicture? `${API_URL}/../${userData.profilePicture}` : defaultPicURL}/>
         <div className="profileHeaderRight">
           <div className="profileHeaderTopRight">
             <h2>{userData.username}</h2>

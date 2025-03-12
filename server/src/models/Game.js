@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 var mongoose_1 = require("mongoose");
 var CoverSchema = new mongoose_1.Schema({
     id: { type: Number, required: true },
@@ -43,7 +43,7 @@ var GameSchema = new mongoose_1.Schema({
     similar_games: [SimilarGameSchema],
     storyline: { type: String, required: false },
     summary: { type: String, required: false },
-    averageRating: { type: Number, required: false, default: 0 }
+    averageRating: { type: Number, required: false, "default": 0 }
 });
-var Game = mongoose_1.default.model('Game', GameSchema);
-exports.default = Game;
+var Game = mongoose_1["default"].model('Game', GameSchema);
+exports["default"] = Game;

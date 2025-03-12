@@ -126,7 +126,7 @@ const Chat: React.FC<ChatProps> = ({ receiver }) => {
         {contacts.map((contact, index) => (
           <div key={index} className="chat-contact" onClick={() => setActiveUser(contact)}>
             <div className="chatAvatarWrapper">
-              <img src={`https://localhost:4000/${contact.profilePicture}`} alt="profile" />
+              <img src={`${API_URL}/../${contact.profilePicture}`} alt="profile" />
               <div className={`statusIndicator ${onlineUsers.includes(contact?._id) ? 'online': 'offline'}`}/>
             </div>
 

@@ -24,10 +24,10 @@ const GameDetails: React.FC = () => {
   const [similar_games, setSimilarGames] = useState<Game[]>([]);
   const { user, setUser } = useAuth();
   const { id } = useParams<RouteParams>();
-  const defaultPicURL = "https://localhost:4000/images/default.jpg";
   const { getRealeaseDay, getReleaseMonth, getReleaseYear } = GameUtils();
   const { timeSince } = usePosts();
   const API_URL = process.env.REACT_APP_API_URL;
+  const defaultPicURL = `${API_URL}/../images/default.jpg`;
   useEffect(() => {
     async function fetchGame() {
       const response = await fetch(`${API_URL}/game/${id}`, {
@@ -253,7 +253,7 @@ const GameDetails: React.FC = () => {
                         <img
                           src={
                             review.author.profilePic
-                              ? "https://localhost:4000/" +
+                              ? `${API_URL}` +
                                 review.author.profilePic
                               : defaultPicURL
                           }
