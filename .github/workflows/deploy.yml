@@ -26,4 +26,5 @@ jobs:
             git pull
             cd server
             npm ci
-            sudo npm run start
+            npx tsc
+            pm2 restart index.js

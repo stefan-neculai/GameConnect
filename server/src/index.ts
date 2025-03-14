@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import https from 'https';
-import http from 'http';
+import https, { Server as HTTPSServer } from 'https';
+import http, { Server as HTTPServer } from 'http';
 import fs from 'fs';
 import path from 'path';
 import cookieParser from 'cookie-parser';
@@ -49,7 +49,7 @@ app.get('/home', (req, res) => {
 
 });
 
-let options, server;
+let options, server : HTTPServer | HTTPSServer;
 if(process.env.NODE_ENV === 'production') {
   options = {
     key: fs.readFileSync('/etc/letsencrypt/live/stefanneculai.dev/privkey.pem'),
