@@ -1,7 +1,7 @@
 /* SignupForm.css */
-.SignUp {
-  width: 50%;
-  margin: 2rem auto;
+.SignUpContainer {
+  width: 500px;
+  height: 100%;
   padding: 2rem;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -9,14 +9,14 @@
   background-color: white;
 }
 
-.SignUp label {
+.SignUpContainer label {
   display: block;
   margin-bottom: 0.5rem;
   font-size: 1rem;
   color: #333;
 }
 
-.SignUp input {
+.SignUpContainer input {
   width: 100%;
   padding: 0.8rem;
   margin-bottom: 1rem;
@@ -25,12 +25,12 @@
   box-sizing: border-box; /* includes padding and border in element's total width and height */
 }
 
-.SignUp input:focus {
+.SignUpContainer input:focus {
   border-color: #0056b3;
   outline: none;
 }
 
-.SignUp button {
+.SignUpContainer button {
   width: 100%;
   padding: 1rem;
   background-color: #007bff;
@@ -42,7 +42,7 @@
   transition: background-color 0.3s;
 }
 
-.SignUp button:hover {
+.SignUpContainer button:hover {
   background-color: #0056b3;
 }
 
@@ -53,6 +53,59 @@
   margin-bottom: 1rem;
 }
 
-.SignUp a {
+.SignUpContainer a {
   text-decoration: underline;
 }
+
+.login-link {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.SignUpWrapper {
+  display: flex;
+  height: 600px;
+  align-items: start;
+  justify-content: center;
+  gap: 0;
+  
+}
+
+.SignUpWrapper img {
+  height: 100%;
+  width: auto;
+  object-fit: cover;
+}
+
+.signup-image-wrapper {
+  position: relative;
+  display: none;
+}
+
+@media (min-width: 1300px) {
+  .signup-image-wrapper  {
+    height: 100%;
+    display: block;
+  }
+
+  .SignUpContainer {
+    border-radius: 8px 0 0 8px;
+    border: 1px solid #ccc ;
+    border-right: none;
+  }
+}
+
+
+
+.signup-image-caption {
+  font-size: var(--text-2xl);
+  color: #ffffff;
+  font-weight: 600;
+  z-index: 1;
+  margin-top: 1rem;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+

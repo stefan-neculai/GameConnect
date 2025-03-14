@@ -52,8 +52,8 @@ app.get('/home', (req, res) => {
 let options, server;
 if(process.env.NODE_ENV === 'production') {
   options = {
-    key: fs.readFileSync(path.join(__dirname, '../cert/private.key')),
-    cert: fs.readFileSync(path.join(__dirname, '../cert/certificate.crt'))
+    key: fs.readFileSync('/etc/letsencrypt/live/stefanneculai.dev/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/stefanneculai.dev/fullchain.pem')
   };
   server = https.createServer(options, app);
 }

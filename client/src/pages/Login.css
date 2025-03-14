@@ -1,5 +1,6 @@
-.Login {
-  width: 50%;
+.LogInContainer {
+  min-width: 300px;
+  max-width: 500px;
   margin: 2rem auto;
   padding: 2rem;
   border: 1px solid #ccc;
@@ -8,20 +9,20 @@
   background-color: white;
 }
 
-.Login h2 {
+.LogInContainer h2 {
   margin-bottom: 20px;
 }
 
-.Login form div {
+.LogInContainer form div {
   margin-bottom: 15px;
 }
 
-.Login label {
+.LogInContainer label {
   display: block;
   margin-bottom: 5px;
 }
 
-.Login input {
+.LogInContainer input {
   width: 100%;
   padding: 0.8rem;
   margin-bottom: 1rem;
@@ -30,7 +31,7 @@
   box-sizing: border-box; /* includes padding and border in element's total width and height */
 }
 
-.Login button {
+.LogInContainer button {
   width: 100%;
   padding: 10px;
   background-color: #007bff;
@@ -40,11 +41,11 @@
   cursor: pointer;
 }
 
-.Login button:hover {
+.LogInContainer button:hover {
   background-color: #0056b3;
 }
 
-.Login a {
+.LogInContainer a {
   text-decoration: underline;
 }
 
@@ -64,4 +65,10 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+.signup-link {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
 }

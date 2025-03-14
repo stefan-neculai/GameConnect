@@ -91,60 +91,66 @@ const SignupForm: React.FC = () => {
   };
 
   return (
-    <div className="SignUp">
-      <h2>Sign up</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-          />
-          {errors.email && <p className="error-message">{errors.email}</p>}
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleInputChange}
-          />
-          {errors.password && (
-            <p className="error-message">{errors.password}</p>
+    <div className="SignUpWrapper">
+      <section className="SignUpContainer">
+        <h2>Create an account</h2>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Email:</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
+            {errors.email && <p className="error-message">{errors.email}</p>}
+          </div>
+          <div>
+            <label>Password:</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+            />
+            {errors.password && (
+              <p className="error-message">{errors.password}</p>
+            )}
+          </div>
+          <div>
+            <label>Confirm Password:</label>
+            <input type="password" />
+          </div>
+          <div>
+            <label>Username:</label>
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleInputChange}
+            />
+            {errors.username && (
+              <p className="error-message">{errors.username}</p>
+            )}
+          </div>
+          {loading ? (
+            <div className="loader"></div>
+          ) : (
+            <button type="submit" disabled={loading}>
+              {" "}
+              Sign Up{" "}
+            </button>
           )}
-        </div>
-        <div>
-          <label>Confirm Password:</label>
-          <input type="password" />
-        </div>
-        <div>
-          <label>Username:</label>
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleInputChange}
-          />
-          {errors.username && (
-            <p className="error-message">{errors.username}</p>
-          )}
-        </div>
-        <p>
-          Already have an account? Click here to
-          <Link to={"/login"}> log in.</Link>
-        </p>
-        {loading ? (
-          <div className="loader"></div>
-        ) : (
-          <button type="submit" disabled={loading}>
-            {" "}
-            Sign Up{" "}
-          </button>
-        )}
-      </form>
+          <p className="login-link">
+            Already have an account? Click here to <Link to={"/login"}>log in.</Link>
+          </p>
+        </form>
+      </section>
+      <div className="signup-image-wrapper">
+        <img src="https://www.gamingzombies.com/blog/wp-content/uploads/2022/04/the-best-social-media-platforms-for-gamers-scaled.jpg" alt="Sign up" />
+        <div className="signup-image-caption">Discover games. Connect with players. Experience more.</div>
+      </div>
+      
     </div>
   );
 };

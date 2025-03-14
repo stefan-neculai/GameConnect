@@ -60,39 +60,40 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="Login">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setErrors(prev => ({ ...prev, email: '' }));
-            }}
-          />
-          {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setErrors(prev => ({ ...prev, password: '' }));
-            }}
-          />
-          {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
-        </div>
-        <p>Don't have an account already? Click here to <Link to={'/signup'}>sign up.</Link></p>
-        {loading ? <div className="loader"> </div> : <button type="submit" disabled={loading}> Log In </button>}
-      
-      </form>
+    <div className="LogInPage">
+      <section className="LogInContainer">
+        <h2>Login</h2>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setErrors(prev => ({ ...prev, email: '' }));
+              }}
+            />
+            {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+          </div>
+          <div>
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setErrors(prev => ({ ...prev, password: '' }));
+              }}
+            />
+            {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
+          </div>
+          {loading ? <div className="loader"> </div> : <button type="submit" disabled={loading}> Log In </button>}
+          <p className="signup-link">Don't have an account already? Click here to <Link to={'/signup'}>sign up.</Link></p>
+        </form>
+      </section>
     </div>
   );
 };
