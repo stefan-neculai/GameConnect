@@ -26,4 +26,4 @@ jobs:
             git pull
             cd server
             npm ci
-            npm run pm2
+            sudo npm run start

@@ -5,7 +5,7 @@ import User from '../models/User';
 import mongoose from 'mongoose';
 import Review from '../models/Review';
 
-const jwtSecret = 'your_jwt_secret';
+const jwtSecret = process.env.JWT_SECRET ?? 'jwtsecret'; // Use a more secure secret in production
 
 export const signUp = async (req: Request, res: Response): Promise<void> => {
   const { username, email, password } = req.body;
