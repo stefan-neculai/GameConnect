@@ -26,4 +26,4 @@ jobs:
             git pull
             cd server
             npm ci
-            pm2 restart server.js
+            npm run pm2

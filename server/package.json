@@ -5,7 +5,8 @@
   "scripts": {
     "test": "jest --detectOpenHandles",
     "start": "ts-node src/index.ts",
-    "dev": "nodemon --exec ts-node src/index.ts"
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "pm2": "pm2 start ./node_modules/.bin/ts-node -- ./src/app.ts"
   },
   "keywords": [],
   "author": "",
