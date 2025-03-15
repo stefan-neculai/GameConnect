@@ -3,3 +3,4 @@ client/node_modules
 server/images
 server/uploads
 server/.env
+server/dist

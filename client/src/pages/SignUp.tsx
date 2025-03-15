@@ -91,12 +91,11 @@ const SignupForm: React.FC = () => {
   };
 
   return (
-    <div className="SignUpWrapper">
       <section className="SignUpContainer">
         <h2>Create an account</h2>
         <form onSubmit={handleSubmit}>
           <div>
-            <label>Email:</label>
+            <label>Email</label>
             <input
               type="email"
               name="email"
@@ -106,7 +105,7 @@ const SignupForm: React.FC = () => {
             {errors.email && <p className="error-message">{errors.email}</p>}
           </div>
           <div>
-            <label>Password:</label>
+            <label>Password</label>
             <input
               type="password"
               name="password"
@@ -118,11 +117,11 @@ const SignupForm: React.FC = () => {
             )}
           </div>
           <div>
-            <label>Confirm Password:</label>
+            <label>Confirm Password</label>
             <input type="password" />
           </div>
           <div>
-            <label>Username:</label>
+            <label>Username</label>
             <input
               type="text"
               name="username"
@@ -146,12 +145,6 @@ const SignupForm: React.FC = () => {
           </p>
         </form>
       </section>
-      <div className="signup-image-wrapper">
-        <img src="https://www.gamingzombies.com/blog/wp-content/uploads/2022/04/the-best-social-media-platforms-for-gamers-scaled.jpg" alt="Sign up" />
-        <div className="signup-image-caption">Discover games. Connect with players. Experience more.</div>
-      </div>
-      
-    </div>
   );
 };
 

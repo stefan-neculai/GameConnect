@@ -60,12 +60,11 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="LogInPage">
       <section className="LogInContainer">
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="email">Email:</label>
+            <label htmlFor="email">Email</label>
             <input
               type="email"
               id="email"
@@ -78,7 +77,7 @@ const Login: React.FC = () => {
             {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
           </div>
           <div>
-            <label htmlFor="password">Password:</label>
+            <label htmlFor="password">Password</label>
             <input
               type="password"
               id="password"
@@ -94,7 +93,6 @@ const Login: React.FC = () => {
           <p className="signup-link">Don't have an account already? Click here to <Link to={'/signup'}>sign up.</Link></p>
         </form>
       </section>
-    </div>
   );
 };
 

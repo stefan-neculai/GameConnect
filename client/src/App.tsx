@@ -27,6 +27,7 @@ import { useSocket } from "./context/SocketContext";
 import Chat from "./components/Chat";
 import Modal from "./components/Modal";
 import './variables.css';
+import AuthPage from "./pages/AuthPage";
 
 const App: React.FC = () => {
   const { isLoggedIn, setIsLoggedIn, handleLogin, user } = useAuth();
@@ -120,8 +121,8 @@ const App: React.FC = () => {
         <Chat/>
       </Modal>
         <Routes>
-          <Route path="/login" element={<AuthRoute><Login/></AuthRoute>} />
-          <Route path="/signup" element={<AuthRoute><SignUp /></AuthRoute>} />
+          <Route path="/login" element={<AuthRoute><AuthPage/></AuthRoute>} />
+          <Route path="/signup" element={<AuthRoute><AuthPage /></AuthRoute>} />
           <Route path="/" element={<ProtectedRoute><Home/></ProtectedRoute>} />
           <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
           <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
