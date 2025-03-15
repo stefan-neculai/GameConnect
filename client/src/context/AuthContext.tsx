@@ -18,7 +18,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL;
@@ -28,8 +28,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const tokenValue = token.split('=')[1];
       const decoded: User = jwtDecode(tokenValue);
       fetchUser(decoded.id);
-      setIsLoggedIn(true);
-      setUser(decoded);
     }
     else {
       navigate('/login');
@@ -47,6 +45,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (response.ok) {
       const data = await response.json();
       setUser(data);
+      setIsLoggedIn(true);
     }
   }
 

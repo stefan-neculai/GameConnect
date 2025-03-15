@@ -39,8 +39,12 @@ const App: React.FC = () => {
   useEffect(handleLogin, []);
 
   useEffect(() => {
-    console.log("isLoggedIn state changed to:", isLoggedIn);
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    console.log("user is ", user, user?.id, user?._id);
+  }
+  , [user]);
 
 
   const handleLogout = () => {

@@ -27,4 +27,3 @@ jobs:
             cd server
             npm ci
             npx tsc
-            pm2 restart index.js
