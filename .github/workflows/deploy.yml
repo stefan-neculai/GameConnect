@@ -26,3 +26,7 @@ jobs:
             git pull
             cd server
             npm ci
+            rm -rf dist
+            npx tsc
+            rm src/*.js && rm src/*/*.js
+            sudo pm2 restart index
