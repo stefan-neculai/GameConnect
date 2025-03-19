@@ -26,4 +26,3 @@ jobs:
             git pull
             cd server
             npm ci
-            npx tsc

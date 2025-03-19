@@ -80,10 +80,7 @@ const SignupForm: React.FC = () => {
         }),
       });
       if (login.ok) {
-        const data = await login.json(); // Parsing the JSON response body
-        document.cookie = `token=${data.token}; path=/; max-age=3600; domain=localhost; secure; samesite=None`; // Set cookie manually
         handleLogin();
-        navigate("/");
       }
     } else {
       console.log("Validation errors", errors);

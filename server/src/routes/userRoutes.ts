@@ -1,5 +1,5 @@
 import express from 'express';
-import { signUp, login, getUserById, updateUser, addGameToFavorites, followUser, getFollowers, getFollowing, getContacts, unfollowUser, removeGameFromFavorites } from '../controllers/userController';
+import { signUp, login, getUserById, updateUser, addGameToFavorites, followUser, getFollowers, getFollowing, getContacts, unfollowUser, removeGameFromFavorites, logout, auth } from '../controllers/userController';
 import authenticateToken from '../middleware/auth';
 import upload from '../middleware/multer';
 
@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.post('/signup', signUp);
 router.post('/login', login);
+router.post('/logout', authenticateToken, logout);
+router.get('/auth', authenticateToken, auth);
 router.get('/user/contacts', authenticateToken, getContacts);
 router.put('/user/update/:id', authenticateToken, upload.fields([
   { name: 'profilePicture', maxCount: 1 },

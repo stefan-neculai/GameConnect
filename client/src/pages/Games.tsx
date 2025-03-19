@@ -3,7 +3,7 @@ import { Game } from '../types/Game';
 import './Games.css';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faSearch, faArrowDown, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { genreOptions, modeOptions, platformOptions } from '../constants/filterOptions';
 
 const Games: React.FC = () => {
@@ -103,15 +103,18 @@ const Games: React.FC = () => {
           <FontAwesomeIcon icon={faSearch} /> 
           <input className="gamesSearchInput" onChange={(e) => setSearch(e.target.value)} placeholder='Search games...'/>
         </div>
-          <div onClick={() => handleFilterOpen("genre")} className="genreFilter">
-            Genre
-          </div>
-          <div onClick={() => handleFilterOpen("platform")} className="platformFilter">
-            Platform
-          </div>
-          <div onClick={() => handleFilterOpen("mode")} className="modeFilter">
-            Mode
-          </div>
+        <div>
+          Filter options:
+        </div>
+        <div onClick={() => handleFilterOpen("genre")} className="genreFilter">
+          Genre
+        </div>
+        <div onClick={() => handleFilterOpen("platform")} className="platformFilter">
+          Platform
+        </div>
+        <div onClick={() => handleFilterOpen("mode")} className="modeFilter">
+          Mode
+        </div>
       </div>
       {isFilterOpen.genre && <div className="filterOptions">
         {genreOptions.map(option => (

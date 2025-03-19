@@ -4,6 +4,11 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User';
 import mongoose from 'mongoose';
 import Review from '../models/Review';
+import { Auth } from 'mongodb';
+
+interface AuthRequest extends Request {
+  user?: any;
+}
 
 const jwtSecret = process.env.JWT_SECRET ?? 'jwtsecret'; // Use a more secure secret in production
 
@@ -51,11 +56,28 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     const token = jwt.sign({ id: user._id, email: user.email, username : user.username, profilePicture : user.profilePicture }, jwtSecret, { expiresIn: '7d' });
-    res.status(200).json({ token });
+    console.log(`token ${token}`);
+    res.cookie("token", token, {
+      httpOnly: true, // Prevent JavaScript access
+      secure: process.env.NODE_ENV == 'production'? true : false, // true if production else false
+      sameSite: process.env.NODE_ENV == 'production'? 'none' : 'lax', // Required for cross-origin requests
+    });
+    res.status(200).send({message: 'Login successful', user : user});
   } catch (err: any) {
     res.status(500).send('Error logging in: ' + err.message);
   }
 };
+
+export const logout = async (req: Request, res: Response): Promise<void> => {
+  res.clearCookie('token');
+  res.status(200).send('Logged out successfully');
+}
+
+export const auth = async (req: AuthRequest, res: Response): Promise<void> => {
+  console.log(req.user);
+  const user = await User.findOne({ _id : req.user.id });
+  res.status(200).send({message: 'Authenticated', user : user});
+}
 
 export const getUserById = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;

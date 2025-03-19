@@ -30,13 +30,15 @@ import './variables.css';
 import AuthPage from "./pages/AuthPage";
 
 const App: React.FC = () => {
-  const { isLoggedIn, setIsLoggedIn, handleLogin, user } = useAuth();
+  const { isLoggedIn, setIsLoggedIn, checkLogin, user } = useAuth();
   const { notifications } = useSocket();
   const [isChatOpen, setChatOpen] = useState(false);
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL;
 
-  useEffect(handleLogin, []);
+  useEffect(() => {
+    checkLogin();
+  }, []);
 
   useEffect(() => {
   }, [isLoggedIn]);
@@ -47,12 +49,20 @@ const App: React.FC = () => {
   , [user]);
 
 
-  const handleLogout = () => {
-    // Clear cookie by setting its expiry to the past
-    document.cookie = "token=; Max-Age=0; path=/;";
-    setIsLoggedIn(false);
-    // Optionally redirect the user to the login page
-    navigate("/login");
+  const handleLogout = async () => {
+    let res = await fetch(`${API_URL}/logout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    if (res.ok) {
+      setIsLoggedIn(false);
+      navigate("/login");
+    } else {
+      console.log("Failed to logout");
+    }
   };
 
   // ProtectedRoute.jsx - Only accessible when logged in

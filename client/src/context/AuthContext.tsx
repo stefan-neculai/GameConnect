@@ -9,6 +9,7 @@ interface AuthContextType {
   handleLogin: () => void;
   setIsLoggedIn: (isLoggedIn: boolean) => void;
   setUser: (user: User | null) => void;
+  checkLogin: () => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -20,17 +21,35 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
+
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL;
-  const handleLogin = () => {
-    const token = document.cookie.split(';').find(cookie => cookie.trim().startsWith('token='));
-    if (token) {
-      const tokenValue = token.split('=')[1];
-      const decoded: User = jwtDecode(tokenValue);
-      fetchUser(decoded.id);
+
+  const checkLogin = async () => {
+    const res = await fetch(`${API_URL}/auth`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+
+    if(res.ok) {
+      let response = await res.json();
+      setUser(response.user);
+      setIsLoggedIn(true);
+      return true;
     }
-    else {
+    setIsLoggedIn(false);
+    return false;
+  }
+
+  const handleLogin = async () => {
+    let loggedIn = await checkLogin();
+    if(!loggedIn) {
       navigate('/login');
+    } else {  
+      navigate('/');
     }
   }
 
@@ -49,9 +68,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }
 
-  useEffect(handleLogin, []);
   return (
-    <AuthContext.Provider value={{ handleLogin, isLoggedIn, user, setIsLoggedIn, setUser }}>
+    <AuthContext.Provider value={{ handleLogin, isLoggedIn, user, setIsLoggedIn, setUser, checkLogin }}>
       {children}
     </AuthContext.Provider>
   );
